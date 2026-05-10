@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán | Mặn Salt</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">Mặn.</a>
+        <nav class="nav-links">
+            <a href="index.html">Trang chủ</a>
+            <a href="danh-muc.html">Sản phẩm</a>
+            <a href="tim-kiem.html"><i class="fas fa-search"></i> Tìm kiếm</a>
+        </nav>
+        <div class="header-actions">
+            <div id="user-menu-container">
+                <!-- Rendered by JS -->
+            </div>
+            <a href="gio-hang.html" class="cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+        <div class="page-header" data-aos="fade-in">
+            <h1>Thanh Toán</h1>
+        </div>
+        <section class="container" style="padding-top: 40px; padding-bottom: 80px; display: flex; gap: 64px;">
+            <div style="flex: 2;" data-aos="fade-right">
+                <h3 style="margin-bottom: 24px;">Thông tin giao hàng</h3>
+                <form id="checkout-form" style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="display: flex; gap: 20px;">
+                        <input type="text" id="chk-name" placeholder="Họ và tên *" required class="form-input" style="flex: 1;">
+                        <input type="text" id="chk-phone" placeholder="Số điện thoại *" required class="form-input" style="flex: 1;">
+                    </div>
+                    <input type="email" id="chk-email" placeholder="Email" required class="form-input">
+                    <input type="text" id="chk-address" placeholder="Địa chỉ giao hàng *" required class="form-input">
+                    <textarea placeholder="Ghi chú đơn hàng" class="form-input" style="height: 100px;"></textarea>
+                    
+                    <h3 style="margin-top: 24px; margin-bottom: 16px;">Phương thức thanh toán</h3>
+                    <div style="border: 1px solid var(--border); padding: 16px;">
+                        <label style="display: flex; align-items: center; gap: 12px; cursor: pointer;">
+                            <input type="radio" name="payment" checked> Thanh toán khi nhận hàng (COD)
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div style="flex: 1; background: var(--surface-dim); padding: 32px; border: 1px solid var(--border);" data-aos="fade-left">
+                <h3 style="margin-bottom: 24px;">Đơn hàng của bạn</h3>
+                <div id="checkout-items" style="margin-bottom: 24px; border-bottom: 1px solid var(--border); padding-bottom: 16px;"></div>
+                <div style="display: flex; justify-content: space-between; font-size: 20px; font-weight: 600; margin-bottom: 32px;">
+                    <span>Tổng:</span>
+                    <span id="checkout-total" style="color: var(--accent);">0đ</span>
+                </div>
+                <button class="btn btn-primary" id="btn-checkout-submit" style="width: 100%;">Đặt Hàng</button>
+            </div>
+        </section>
+        
+    <footer class="footer">
+        <h2 class="logo" style="margin-bottom: 16px;">Mặn.</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Tinh hoa muối Việt. Tinh khiết từ thiên nhiên.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <script src="app.js"></script>
+    <script>initCheckoutPage();</script>
+</body>
+</html>

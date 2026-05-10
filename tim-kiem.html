@@ -1,0 +1,60 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tìm Kiếm | Mặn Salt</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">Mặn.</a>
+        <nav class="nav-links">
+            <a href="index.html">Trang chủ</a>
+            <a href="danh-muc.html">Sản phẩm</a>
+            <a href="tim-kiem.html"><i class="fas fa-search"></i> Tìm kiếm</a>
+        </nav>
+        <div class="header-actions">
+            <div id="user-menu-container">
+                <!-- Rendered by JS -->
+            </div>
+            <a href="gio-hang.html" class="cart-icon">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="cart-badge" id="cart-count">0</span>
+            </a>
+        </div>
+    </header>
+
+        <div class="page-header" data-aos="fade-in">
+            <h1>Tìm Kiếm Sản Phẩm</h1>
+        </div>
+        <section class="container" style="padding-top: 40px; padding-bottom: 80px; text-align: center;">
+            <input type="text" id="search-input" placeholder="Nhập tên sản phẩm muối..." class="form-input" style="width: 50%; max-width: 500px; padding: 16px; font-size: 18px; margin-bottom: 40px;">
+            <div class="grid-4" id="search-results"></div>
+        </section>
+        
+    <footer class="footer">
+        <h2 class="logo" style="margin-bottom: 16px;">Mặn.</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Tinh hoa muối Việt. Tinh khiết từ thiên nhiên.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
+    <script src="app.js"></script>
+    <script>initSearch();</script>
+</body>
+</html>

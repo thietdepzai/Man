@@ -1,0 +1,209 @@
+
+const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+
+let products = JSON.parse(localStorage.getItem('products')) || [];
+let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+function switchTab(tabId) {
+    document.getElementById('tab-dashboard').style.display = 'none';
+    document.getElementById('tab-products').style.display = 'none';
+    document.getElementById('tab-orders').style.display = 'none';
+    
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+    
+    document.getElementById('tab-' + tabId).style.display = 'block';
+    
+    if(tabId === 'dashboard') renderDashboard();
+    if(tabId === 'products') renderProducts();
+    if(tabId === 'orders') renderOrders();
+}
+
+function renderDashboard() {
+    const totalRevenue = orders.filter(o => o.status === 'Hoàn thành').reduce((sum, o) => sum + o.total, 0);
+    document.getElementById('stat-revenue').innerText = formatPrice(totalRevenue);
+    document.getElementById('stat-orders').innerText = orders.length;
+    document.getElementById('stat-products').innerText = products.length;
+    
+    const recent = [...orders].reverse().slice(0, 5);
+    const tbody = document.getElementById('recent-orders-table');
+    tbody.innerHTML = recent.map(o => `
+        <tr>
+            <td><strong>${o.id}</strong></td>
+            <td>${o.userEmail}</td>
+            <td style="font-weight: 600;">${formatPrice(o.total)}</td>
+            <td><span class="badge ${o.status === 'Hoàn thành' ? 'badge-success' : 'badge-pending'}">${o.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function renderProducts() {
+    const tbody = document.getElementById('products-table');
+    tbody.innerHTML = products.map(p => `
+        <tr>
+            <td><img src="${p.img}" class="product-thumb"></td>
+            <td style="font-weight: 500;">${p.name}</td>
+            <td style="color: var(--admin-accent); font-weight: 600;">${formatPrice(p.price)}</td>
+            <td>
+                <button class="action-btn edit-btn" onclick="editProduct(${p.id})"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete-btn" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function renderOrders() {
+    const tbody = document.getElementById('orders-table');
+    tbody.innerHTML = [...orders].reverse().map((o, index) => {
+        const realIndex = orders.length - 1 - index;
+        return `
+        <tr>
+            <td><strong>${o.id}</strong></td>
+            <td>${o.date}</td>
+            <td>${o.userEmail}</td>
+            <td style="font-weight: 600;">${formatPrice(o.total)}</td>
+            <td><span class="badge ${o.status === 'Hoàn thành' ? 'badge-success' : 'badge-pending'}">${o.status}</span></td>
+            <td>
+                <button class="action-btn view-btn" onclick="viewOrder(${realIndex})"><i class="fas fa-eye"></i></button>
+                ${o.status !== 'Hoàn thành' ? `<button class="btn btn-primary btn-small" onclick="completeOrder(${realIndex})">Duyệt</button>` : ''}
+            </td>
+        </tr>
+    `}).join('');
+}
+
+function openProductModal() {
+    document.getElementById('product-form').reset();
+    document.getElementById('prod-id').value = '';
+    document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+function closeProductModal() {
+    document.getElementById('productModal').style.display = 'none';
+}
+
+document.getElementById('product-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const id = document.getElementById('prod-id').value;
+    const name = document.getElementById('prod-name').value;
+    const price = parseInt(document.getElementById('prod-price').value);
+    const img = document.getElementById('prod-img').value;
+    const desc = document.getElementById('prod-desc').value;
+    
+    if(id) {
+        // Edit
+        const p = products.find(x => x.id == id);
+        p.name = name; p.price = price; p.img = img; p.desc = desc;
+        Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
+    } else {
+        // Add
+        const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
+        products.push({ id: newId, name, price, img, desc });
+        Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
+    }
+    
+    localStorage.setItem('products', JSON.stringify(products));
+    closeProductModal();
+    renderProducts();
+    renderDashboard();
+});
+
+window.editProduct = function(id) {
+    const p = products.find(x => x.id == id);
+    document.getElementById('prod-id').value = p.id;
+    document.getElementById('prod-name').value = p.name;
+    document.getElementById('prod-price').value = p.price;
+    document.getElementById('prod-img').value = p.img;
+    document.getElementById('prod-desc').value = p.desc;
+    document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
+    document.getElementById('productModal').style.display = 'flex';
+}
+
+window.deleteProduct = function(id) {
+    Swal.fire({
+        title: 'Xóa sản phẩm?',
+        text: "Hành động này không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e53e3e',
+        confirmButtonText: 'Xóa ngay',
+        cancelButtonText: 'Hủy'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            products = products.filter(x => x.id != id);
+            localStorage.setItem('products', JSON.stringify(products));
+            renderProducts();
+            renderDashboard();
+            Swal.fire('Đã xóa!', 'Sản phẩm đã bị xóa.', 'success');
+        }
+    });
+}
+
+window.viewOrder = function(index) {
+    const o = orders[index];
+    let html = `
+        <p><strong>Mã đơn:</strong> ${o.id}</p>
+        <p><strong>Khách hàng:</strong> ${o.userEmail}</p>
+        <p><strong>Ngày đặt:</strong> ${o.date}</p>
+        <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--admin-border);">
+        <h4>Sản phẩm:</h4>
+        <ul style="padding-left: 20px; margin-top: 8px; line-height: 1.8;">
+    `;
+    o.items.forEach(item => {
+        html += `<li>${item.name} x ${item.qty} = ${formatPrice(item.price * item.qty)}</li>`;
+    });
+    html += `</ul>
+        <h3 style="margin-top: 16px; color: var(--admin-accent);">Tổng: ${formatPrice(o.total)}</h3>
+    `;
+    document.getElementById('order-detail-content').innerHTML = html;
+    document.getElementById('orderModal').style.display = 'flex';
+}
+
+window.completeOrder = function(index) {
+    orders[index].status = 'Hoàn thành';
+    localStorage.setItem('orders', JSON.stringify(orders));
+    renderOrders();
+    renderDashboard();
+    Swal.fire('Thành công', 'Đã duyệt đơn hàng!', 'success');
+}
+
+// Init
+document.addEventListener('DOMContentLoaded', () => {
+    renderDashboard();
+});
+
+// --- Image Management ---
+function getCsrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+}
+
+async function handleProductImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+        Swal.fire({ title: 'Đang tải lên...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+        const response = await fetch('/admin/upload-image', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': getCsrfToken()
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById('prod-img').value = data.url;
+            Swal.close();
+        } else {
+            Swal.fire('Lỗi', data.message || 'Tải ảnh thất bại', 'error');
+        }
+    } catch (error) {
+        Swal.fire('Lỗi', 'Đã xảy ra lỗi khi tải ảnh', 'error');
+    } finally {
+        event.target.value = ''; // Reset input
+    }
+}
