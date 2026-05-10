@@ -42,6 +42,4 @@ Route::get('/admin', function () {
     return view('admin');
 })->name('admin');
 
-Route::get('/admin/images', [App\Http\Controllers\ImageController::class, 'index'])->name('admin.images.index');
-Route::post('/admin/upload-image', [App\Http\Controllers\ImageController::class, 'upload'])->name('admin.images.upload');
-Route::delete('/admin/images/{filename}', [App\Http\Controllers\ImageController::class, 'destroy'])->name('admin.images.destroy');
+

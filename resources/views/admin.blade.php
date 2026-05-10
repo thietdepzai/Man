@@ -145,11 +145,10 @@
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh sản phẩm</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="url" id="prod-img" class="form-input" placeholder="Link ảnh online https://..." required>
-                        <button type="button" class="btn btn-primary" onclick="document.getElementById('prod-img-file').click()" style="padding: 0 16px;"><i class="fas fa-upload"></i> Chọn ảnh</button>
+                    <input type="url" id="prod-img" class="form-input" placeholder="Dán link ảnh tại đây, ví dụ: https://i.ibb.co/..." required>
+                    <div id="prod-img-preview" style="margin-top: 8px; display: none;">
+                        <img id="prod-img-preview-img" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--admin-border);">
                     </div>
-                    <input type="file" id="prod-img-file" style="display: none;" accept="image/*" onchange="handleProductImageUpload(event)">
                 </div>
                 <div class="form-group">
                     <label>Mô tả</label>

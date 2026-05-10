@@ -273,38 +273,17 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
 });
 
-// --- Image Management ---
-function getCsrfToken() {
-    return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-}
+// --- Image URL Preview ---
+document.getElementById('prod-img').addEventListener('input', function() {
+    const url = this.value.trim();
+    const preview = document.getElementById('prod-img-preview');
+    const previewImg = document.getElementById('prod-img-preview-img');
 
-async function handleProductImageUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append('image', file);
-
-    try {
-        Swal.fire({ title: 'Đang tải lên...', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
-        const response = await fetch('/admin/upload-image', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': getCsrfToken()
-            },
-            body: formData
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            document.getElementById('prod-img').value = data.url;
-            Swal.close();
-        } else {
-            Swal.fire('Lỗi', data.message || 'Tải ảnh thất bại', 'error');
-        }
-    } catch (error) {
-        Swal.fire('Lỗi', 'Đã xảy ra lỗi khi tải ảnh', 'error');
-    } finally {
-        event.target.value = ''; // Reset input
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        previewImg.src = url;
+        previewImg.onload = () => { preview.style.display = 'block'; };
+        previewImg.onerror = () => { preview.style.display = 'none'; };
+    } else {
+        preview.style.display = 'none';
     }
-}
+});
