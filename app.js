@@ -47,9 +47,11 @@ function initRegister() {
         const name = document.getElementById('reg-name').value;
         const email = document.getElementById('reg-email').value;
         const pass = document.getElementById('reg-pass').value;
+        const gender = document.getElementById('reg-gender').value;
+        const dob = document.getElementById('reg-dob').value;
         
         // Save to fake DB
-        localStorage.setItem('db_user', JSON.stringify({name, email, pass}));
+        localStorage.setItem('db_user', JSON.stringify({name, email, pass, gender, dob}));
         
         Swal.fire('Thành công', 'Đăng ký thành công! Vui lòng đăng nhập.', 'success').then(() => {
             window.location = 'login.html';
@@ -66,7 +68,7 @@ function initLogin() {
         const dbUser = JSON.parse(localStorage.getItem('db_user'));
         
         if(dbUser && dbUser.email === email && dbUser.pass === pass) {
-            localStorage.setItem('currentUser', JSON.stringify({name: dbUser.name, email: dbUser.email}));
+            localStorage.setItem('currentUser', JSON.stringify({name: dbUser.name, email: dbUser.email, gender: dbUser.gender, dob: dbUser.dob}));
             Swal.fire('Thành công', 'Đăng nhập thành công!', 'success').then(() => {
                 window.location = 'index.html';
             });
@@ -129,6 +131,57 @@ function renderProducts(containerId, limit = null) {
 function initHome() {
     renderProducts('featured-products', 4);
     new Swiper('.mySwiper', { effect: 'fade', autoplay: { delay: 5000 } });
+    
+    // Popup Recommend Product
+    setTimeout(showRecommendPopup, 3000);
+}
+
+function calculateAge(dob) {
+    if(!dob) return 0;
+    const diff = Date.now() - new Date(dob).getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+}
+
+function showRecommendPopup() {
+    const user = getUser();
+    if(!user || !user.gender || !user.dob) return; // Nếu chưa đăng nhập hoặc không có đủ thông tin thì không hiện
+    
+    fetch('analysis.json')
+    .then(res => res.json())
+    .then(data => {
+        const age = calculateAge(user.dob);
+        let groupKey = '';
+        if(user.gender === 'nam') {
+            groupKey = age <= 30 ? 'nam_tre' : 'nam_trung_nien';
+        } else {
+            groupKey = age <= 30 ? 'nu_tre' : 'nu_trung_nien';
+        }
+        
+        const recommend = data.demographics[groupKey];
+        if(recommend) {
+            const product = products.find(p => p.id === recommend.top_product_id);
+            if(product) {
+                Swal.fire({
+                    title: 'Dành Riêng Cho Bạn!',
+                    html: `
+                        <p style="margin-bottom: 12px; color: var(--text-muted);">${recommend.reason}</p>
+                        <div style="display: flex; gap: 15px; text-align: left; background: var(--surface); padding: 10px; border-radius: 8px;">
+                            <img src="${product.img}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px;">
+                            <div>
+                                <h4 style="margin: 0 0 5px 0;">${product.name}</h4>
+                                <p style="color: var(--accent); font-weight: bold; margin: 0;">${formatPrice(product.price)}</p>
+                                <a href="san-pham.html?id=${product.id}" class="btn btn-primary" style="padding: 5px 10px; font-size: 12px; margin-top: 5px; display: inline-block;">Xem ngay</a>
+                            </div>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    showCloseButton: true,
+                    width: 400
+                });
+            }
+        }
+    })
+    .catch(err => console.log('Không lấy được analysis data', err));
 }
 
 function initProductDetail() {

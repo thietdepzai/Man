@@ -8,6 +8,7 @@ function switchTab(tabId) {
     document.getElementById('tab-dashboard').style.display = 'none';
     document.getElementById('tab-products').style.display = 'none';
     document.getElementById('tab-orders').style.display = 'none';
+    document.getElementById('tab-analytics').style.display = 'none';
     
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
     event.currentTarget.classList.add('active');
@@ -17,6 +18,50 @@ function switchTab(tabId) {
     if(tabId === 'dashboard') renderDashboard();
     if(tabId === 'products') renderProducts();
     if(tabId === 'orders') renderOrders();
+    if(tabId === 'analytics') renderAnalytics();
+}
+
+function renderAnalytics() {
+    const container = document.getElementById('analytics-content');
+    fetch('/analysis.json')
+    .then(res => res.json())
+    .then(data => {
+        let html = `<p style="color: var(--text-muted); margin-bottom: 20px;">Cập nhật lần cuối: ${data.last_updated} (Dữ liệu từ Python Script)</p>`;
+        
+        html += `<div class="grid-3" style="margin-bottom: 30px;">
+                    <div class="card" style="background: var(--bg);">
+                        <div style="color: #718096">Tổng User Phân Tích</div>
+                        <div class="stat-value">${data.general_stats.total_users_analyzed}</div>
+                    </div>
+                    <div class="card" style="background: var(--bg);">
+                        <div style="color: #718096">Tỉ Lệ Giới Tính</div>
+                        <div class="stat-value" style="font-size: 20px;">Nam: ${data.general_stats.gender_ratio.nam}% - Nữ: ${data.general_stats.gender_ratio.nu}%</div>
+                    </div>
+                    <div class="card" style="background: var(--bg);">
+                        <div style="color: #718096">Nhóm Tuổi Chính</div>
+                        <div class="stat-value" style="font-size: 20px;">18-30: ${data.general_stats.age_groups['18-30']}%</div>
+                    </div>
+                 </div>`;
+                 
+        html += `<h3>Xu Hướng Sở Thích Theo Khách Hàng</h3>
+                 <table style="margin-top: 16px;">
+                     <thead><tr><th>Nhóm Khách Hàng</th><th>Sản Phẩm Yêu Thích</th><th>Lý Do Phân Tích</th></tr></thead>
+                     <tbody>`;
+                     
+        for(const key in data.demographics) {
+            const row = data.demographics[key];
+            html += `<tr>
+                        <td style="font-weight: 500;">${row.desc}</td>
+                        <td style="color: var(--admin-accent); font-weight: 600;">${row.top_product_name}</td>
+                        <td style="color: #718096;">${row.reason}</td>
+                     </tr>`;
+        }
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    })
+    .catch(err => {
+        container.innerHTML = `<p style="color: red;">Lỗi khi tải dữ liệu phân tích. Hãy chắc chắn rằng bạn đã chạy file analyze_data.py</p>`;
+    });
 }
 
 function renderDashboard() {

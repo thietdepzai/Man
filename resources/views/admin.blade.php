@@ -23,6 +23,7 @@
         <div class="nav-item active" onclick="switchTab('dashboard')"><i class="fas fa-chart-line"></i> Tổng quan</div>
         <div class="nav-item" onclick="switchTab('products')"><i class="fas fa-box"></i> Sản phẩm</div>
         <div class="nav-item" onclick="switchTab('orders')"><i class="fas fa-shopping-cart"></i> Đơn hàng</div>
+        <div class="nav-item" onclick="switchTab('analytics')"><i class="fas fa-chart-pie"></i> Phân tích AI</div>
         <div style="margin-top: auto; padding: 24px;">
             <a href="{{ route('home') }}" style="color: #a0aec0; text-decoration: none;"><i class="fas fa-arrow-left"></i> Về trang mua sắm</a>
         </div>
@@ -77,6 +78,14 @@
                     <thead><tr><th>Mã Đơn</th><th>Ngày đặt</th><th>Khách hàng</th><th>Tổng tiền</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
                     <tbody id="orders-table"></tbody>
                 </table>
+            </div>
+        </div>
+        <div id="tab-analytics" style="display: none;">
+            <div class="header">
+                <h2>Phân Tích AI - Hành Vi Mua Hàng</h2>
+            </div>
+            <div class="card" id="analytics-content">
+                <p>Đang tải dữ liệu phân tích từ Python...</p>
             </div>
         </div>
     </div>

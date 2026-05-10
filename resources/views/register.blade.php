@@ -11,6 +11,12 @@
                     <input type="text" id="reg-name" placeholder="Họ và tên" required class="form-input">
                     <input type="email" id="reg-email" placeholder="Email" required class="form-input">
                     <input type="password" id="reg-pass" placeholder="Mật khẩu" required class="form-input">
+                    <select id="reg-gender" required class="form-input" style="appearance: auto;">
+                        <option value="" disabled selected>Chọn giới tính</option>
+                        <option value="nam">Nam</option>
+                        <option value="nu">Nữ</option>
+                    </select>
+                    <input type="date" id="reg-dob" required class="form-input" placeholder="Ngày sinh">
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng Ký</button>
                 </form>
                 <p style="margin-top: 24px; color: var(--text-muted);">Đã có tài khoản? <a href="{{ route('login') }}" style="color: var(--primary); font-weight: 600;">Đăng nhập</a></p>
