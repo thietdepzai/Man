@@ -65,11 +65,67 @@ function renderAnalytics() {
 }
 
 function renderDashboard() {
+    // --- Doanh thu ---
     const totalRevenue = orders.filter(o => o.status === 'Hoàn thành').reduce((sum, o) => sum + o.total, 0);
     document.getElementById('stat-revenue').innerText = formatPrice(totalRevenue);
+
+    // --- Tổng đơn hàng ---
     document.getElementById('stat-orders').innerText = orders.length;
+
+    // --- Đang xử lý ---
+    const processing = orders.filter(o => o.status === 'Đang xử lý').length;
+    document.getElementById('stat-processing').innerText = processing;
+
+    // --- Đang giao ---
+    const shipping = orders.filter(o => o.status === 'Đang giao').length;
+    document.getElementById('stat-shipping').innerText = shipping;
+
+    // --- Sản phẩm hiện có ---
     document.getElementById('stat-products').innerText = products.length;
-    
+
+    // --- Tính sản phẩm mua nhiều nhất / ít nhất ---
+    const salesMap = {};
+    orders.forEach(o => {
+        if(o.items) {
+            o.items.forEach(item => {
+                const key = item.name || item.id;
+                salesMap[key] = (salesMap[key] || 0) + (item.qty || 1);
+            });
+        }
+    });
+
+    const salesEntries = Object.entries(salesMap); // [ [name, qty], ... ]
+    if(salesEntries.length > 0) {
+        salesEntries.sort((a, b) => b[1] - a[1]);
+        const best = salesEntries[0];
+        const worst = salesEntries[salesEntries.length - 1];
+
+        document.getElementById('stat-best-product').innerText = best[0];
+        document.getElementById('stat-best-qty').innerText = `Đã bán: ${best[1]} sản phẩm`;
+        document.getElementById('stat-worst-product').innerText = worst[0];
+        document.getElementById('stat-worst-qty').innerText = `Đã bán: ${worst[1]} sản phẩm`;
+    } else {
+        document.getElementById('stat-best-product').innerText = '—';
+        document.getElementById('stat-best-qty').innerText = 'Chưa có dữ liệu';
+        document.getElementById('stat-worst-product').innerText = '—';
+        document.getElementById('stat-worst-qty').innerText = 'Chưa có dữ liệu';
+    }
+
+    // --- Lượt xem cao nhất ---
+    const viewCounts = JSON.parse(localStorage.getItem('productViews')) || {};
+    const viewEntries = Object.entries(viewCounts); // [ [productId, views], ... ]
+    if(viewEntries.length > 0) {
+        viewEntries.sort((a, b) => b[1] - a[1]);
+        const topView = viewEntries[0];
+        const topProduct = products.find(p => String(p.id) === String(topView[0]));
+        document.getElementById('stat-most-viewed').innerText = topProduct ? topProduct.name : `SP #${topView[0]}`;
+        document.getElementById('stat-most-viewed-count').innerText = `${topView[1]} lượt xem`;
+    } else {
+        document.getElementById('stat-most-viewed').innerText = '—';
+        document.getElementById('stat-most-viewed-count').innerText = 'Chưa có dữ liệu';
+    }
+
+    // --- Đơn hàng gần đây ---
     const recent = [...orders].reverse().slice(0, 5);
     const tbody = document.getElementById('recent-orders-table');
     tbody.innerHTML = recent.map(o => `
@@ -77,7 +133,7 @@ function renderDashboard() {
             <td><strong>${o.id}</strong></td>
             <td>${o.userEmail}</td>
             <td style="font-weight: 600;">${formatPrice(o.total)}</td>
-            <td><span class="badge ${o.status === 'Hoàn thành' ? 'badge-success' : 'badge-pending'}">${o.status}</span></td>
+            <td><span class="badge ${o.status === 'Hoàn thành' ? 'badge-success' : o.status === 'Đang giao' ? 'badge-shipping' : 'badge-pending'}">${o.status}</span></td>
         </tr>
     `).join('');
 }

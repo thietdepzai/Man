@@ -33,20 +33,59 @@
             <div class="header">
                 <h2>Tổng Quan</h2>
             </div>
-            <div class="grid-3">
-                <div class="card">
-                    <div style="color: #718096">Tổng doanh thu (Đã duyệt)</div>
+
+            <!-- Hàng 1: Doanh thu & Đơn hàng -->
+            <div class="grid-4">
+                <div class="card stat-card stat-card--revenue">
+                    <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                    <div class="stat-label">Doanh thu (Đã duyệt)</div>
                     <div class="stat-value" id="stat-revenue">0đ</div>
                 </div>
-                <div class="card">
-                    <div style="color: #718096">Tổng đơn hàng</div>
+                <div class="card stat-card stat-card--total">
+                    <div class="stat-icon"><i class="fas fa-receipt"></i></div>
+                    <div class="stat-label">Tổng đơn hàng</div>
                     <div class="stat-value" id="stat-orders">0</div>
                 </div>
-                <div class="card">
-                    <div style="color: #718096">Sản phẩm hiện có</div>
-                    <div class="stat-value" id="stat-products">0</div>
+                <div class="card stat-card stat-card--processing">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-label">Đang xử lý</div>
+                    <div class="stat-value" id="stat-processing">0</div>
+                </div>
+                <div class="card stat-card stat-card--shipping">
+                    <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                    <div class="stat-label">Đang giao</div>
+                    <div class="stat-value" id="stat-shipping">0</div>
                 </div>
             </div>
+
+            <!-- Hàng 2: Sản phẩm nổi bật -->
+            <div class="grid-4">
+                <div class="card stat-card stat-card--products">
+                    <div class="stat-icon"><i class="fas fa-box-open"></i></div>
+                    <div class="stat-label">Sản phẩm hiện có</div>
+                    <div class="stat-value" id="stat-products">0</div>
+                </div>
+                <div class="card stat-card stat-card--best">
+                    <div class="stat-icon"><i class="fas fa-fire"></i></div>
+                    <div class="stat-label">Mua nhiều nhất</div>
+                    <div class="stat-value stat-value--sm" id="stat-best-product">—</div>
+                    <div class="stat-sub" id="stat-best-qty"></div>
+                </div>
+                <div class="card stat-card stat-card--worst">
+                    <div class="stat-icon"><i class="fas fa-snowflake"></i></div>
+                    <div class="stat-label">Ít mua nhất</div>
+                    <div class="stat-value stat-value--sm" id="stat-worst-product">—</div>
+                    <div class="stat-sub" id="stat-worst-qty"></div>
+                </div>
+                <div class="card stat-card stat-card--views">
+                    <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                    <div class="stat-label">Lượt xem cao nhất</div>
+                    <div class="stat-value stat-value--sm" id="stat-most-viewed">—</div>
+                    <div class="stat-sub" id="stat-most-viewed-count"></div>
+                </div>
+            </div>
+
+            <!-- Đơn hàng gần đây -->
             <div class="card">
                 <h3>Đơn hàng gần đây</h3>
                 <table style="margin-top: 16px;">

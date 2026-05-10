@@ -190,6 +190,11 @@ function initProductDetail() {
     const p = products.find(x => x.id === id);
     if(!p) return;
     
+    // Ghi nhận lượt xem sản phẩm
+    const views = JSON.parse(localStorage.getItem('productViews')) || {};
+    views[id] = (views[id] || 0) + 1;
+    localStorage.setItem('productViews', JSON.stringify(views));
+    
     document.getElementById('detail-img').src = p.img;
     document.getElementById('detail-title').innerText = p.name;
     document.getElementById('detail-price').innerText = formatPrice(p.price);

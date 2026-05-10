@@ -39,3 +39,45 @@ th { color: #718096; font-weight: 500; font-size: 12px; text-transform: uppercas
 .form-input { width: 100%; padding: 12px; border: 1px solid var(--admin-border); border-radius: 4px; box-sizing: border-box; font-family: 'Inter';}
 .form-input:focus { outline: none; border-color: var(--admin-primary); }
 .product-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid var(--admin-border);}
+
+/* --- Dashboard Stat Cards --- */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 24px; }
+
+.stat-card { position: relative; padding-left: 28px; border-left: 4px solid var(--admin-border); transition: transform 0.2s, box-shadow 0.2s; }
+.stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+.stat-icon { font-size: 20px; margin-bottom: 8px; opacity: 0.7; }
+.stat-label { font-size: 13px; color: #718096; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-value--sm { font-size: 18px; line-height: 1.3; }
+.stat-sub { font-size: 13px; color: #a0aec0; margin-top: 4px; font-weight: 500; }
+
+/* Card accent colors */
+.stat-card--revenue  { border-left-color: #38a169; }
+.stat-card--revenue .stat-icon { color: #38a169; }
+
+.stat-card--total    { border-left-color: #3182ce; }
+.stat-card--total .stat-icon { color: #3182ce; }
+
+.stat-card--processing { border-left-color: #d69e2e; }
+.stat-card--processing .stat-icon { color: #d69e2e; }
+
+.stat-card--shipping { border-left-color: #805ad5; }
+.stat-card--shipping .stat-icon { color: #805ad5; }
+
+.stat-card--products { border-left-color: #319795; }
+.stat-card--products .stat-icon { color: #319795; }
+
+.stat-card--best     { border-left-color: #e53e3e; }
+.stat-card--best .stat-icon { color: #e53e3e; }
+
+.stat-card--worst    { border-left-color: #63b3ed; }
+.stat-card--worst .stat-icon { color: #63b3ed; }
+
+.stat-card--views    { border-left-color: #ed8936; }
+.stat-card--views .stat-icon { color: #ed8936; }
+
+.badge-shipping { background: #e9d8fd; color: #553c9a; }
+
+/* Responsive */
+@media (max-width: 1200px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px)  { .grid-4 { grid-template-columns: 1fr; } }
