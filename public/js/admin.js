@@ -193,6 +193,22 @@ function closeProductModal() {
 
 document.getElementById('product-form').addEventListener('submit', function(e) {
     e.preventDefault();
+// ... (phần trên giữ nguyên)
+
+// Thêm sự kiện lắng nghe khi người dùng chọn file ảnh mới để cập nhật ảnh xem trước (Preview)
+document.getElementById('prod-img').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            document.getElementById('prod-img-preview').style.display = 'block';
+            document.getElementById('prod-img-preview-img').src = event.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+function openProductModal() {
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
