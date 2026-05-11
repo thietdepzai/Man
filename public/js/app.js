@@ -63,7 +63,7 @@ function initRegister() {
         // Save to fake DB
         localStorage.setItem('db_user', JSON.stringify({name, email, pass}));
         
-        Swal.fire('Thành công', 'Đăng ký thành công! Vui lòng đăng nhập.', 'success').then(() => {
+        Swal.fire({title:'Thành công',text:'Đăng ký thành công! Vui lòng đăng nhập.',icon:'success',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'}).then(() => {
             window.location = window.routes.login;
         });
     });
@@ -78,7 +78,7 @@ function initLogin() {
         // Admin hardcoded check
         if(email === 'thiet1234@gmail.com' && pass === 'thiet1234') {
             localStorage.setItem('currentUser', JSON.stringify({name: 'Admin', email: email}));
-            Swal.fire('Thành công', 'Đăng nhập trang Quản trị thành công!', 'success').then(() => {
+            Swal.fire({title:'Thành công',text:'Đăng nhập trang Quản trị thành công!',icon:'success',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'}).then(() => {
                 window.location = window.routes.admin;
             });
             return;
@@ -88,11 +88,11 @@ function initLogin() {
         
         if(dbUser && dbUser.email === email && dbUser.pass === pass) {
             localStorage.setItem('currentUser', JSON.stringify({name: dbUser.name, email: dbUser.email}));
-            Swal.fire('Thành công', 'Đăng nhập thành công!', 'success').then(() => {
+            Swal.fire({title:'Thành công',text:'Đăng nhập thành công!',icon:'success',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'}).then(() => {
                 window.location = window.routes.home;
             });
         } else {
-            Swal.fire('Lỗi', 'Email hoặc mật khẩu không chính xác. Xin hãy đăng ký trước!', 'error');
+            Swal.fire({title:'Lỗi',text:'Email hoặc mật khẩu không chính xác. Xin hãy đăng ký trước!',icon:'error',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'});
         }
     });
 }
@@ -118,10 +118,10 @@ function addToCart(product, qty = 1) {
     saveCart();
     
     Toastify({
-        text: `Đã thêm ${product.name} vào giỏ`,
+        text: `✓ Đã thêm ${product.name} vào giỏ`,
         duration: 3000,
         gravity: "bottom", position: "right",
-        style: { background: "#ba1a1a", color: "#fff", borderRadius: "4px" }
+        style: { background: "#1c1917", color: "#fafaf9", borderRadius: "12px", border: "1px solid rgba(245,158,11,0.3)", boxShadow: "0 8px 32px rgba(0,0,0,0.4)", padding: "14px 24px", fontFamily: "Inter, sans-serif", fontSize: "14px" }
     }).showToast();
 }
 
@@ -131,7 +131,9 @@ const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency
 function createProductCard(p) {
     return `
         <a href="${window.routes.san_pham}?id=${p.id}" class="product-card">
-            <img src="${p.img}" class="product-img" alt="${p.name}">
+            <div style="overflow:hidden;">
+                <img src="${p.img}" class="product-img" alt="${p.name}" loading="lazy">
+            </div>
             <div class="product-info-box">
                 <h3 class="product-title">${p.name}</h3>
                 <p class="product-price">${formatPrice(p.price)}</p>
@@ -263,7 +265,7 @@ function initCheckoutPage() {
 
 function processCheckout() {
     if(cart.length === 0) {
-        Swal.fire('Lỗi', 'Giỏ hàng trống!', 'error');
+        Swal.fire({title:'Lỗi',text:'Giỏ hàng trống!',icon:'error',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'});
         return;
     }
     const form = document.getElementById('checkout-form');
@@ -300,7 +302,7 @@ function processCheckout() {
         cart = [];
         saveCart();
         
-        Swal.fire('Thành công!', 'Đơn hàng của bạn đã được đặt thành công.', 'success').then(() => {
+        Swal.fire({title:'Thành công!',text:'Đơn hàng của bạn đã được đặt thành công.',icon:'success',background:'#1c1917',color:'#fafaf9',confirmButtonColor:'#f59e0b'}).then(() => {
             window.location = user ? window.routes.don_hang : window.routes.home;
         });
     }, 2000);
