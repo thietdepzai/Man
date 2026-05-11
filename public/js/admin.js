@@ -288,17 +288,24 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
 });
 
-// --- Image URL Preview ---
-document.getElementById('prod-img').addEventListener('input', function() {
-    const url = this.value.trim();
+// --- Image File Preview ---
+document.getElementById('prod-img').addEventListener('change', function(e) {
+    const file = e.target.files[0];
     const preview = document.getElementById('prod-img-preview');
     const previewImg = document.getElementById('prod-img-preview-img');
 
-    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        previewImg.src = url;
-        previewImg.onload = () => { preview.style.display = 'block'; };
-        previewImg.onerror = () => { preview.style.display = 'none'; };
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
     } else {
-        preview.style.display = 'none';
+        // Nếu không chọn file, có thể ẩn đi hoặc giữ nguyên ảnh cũ nếu đang chỉnh sửa
+        if (!document.getElementById('prod-id').value) {
+            preview.style.display = 'none';
+            previewImg.src = '';
+        }
     }
 });
