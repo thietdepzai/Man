@@ -313,11 +313,14 @@ ul { list-style: none; }
 }
 
 /* User Menu */
-.user-dropdown { position: relative; display: inline-block; }
+.user-dropdown { position: relative; display: inline-block; padding-bottom: 10px; margin-bottom: -10px; }
 .user-dropdown-content {
-    display: none; position: absolute; right: 0; background-color: white; 
-    min-width: 160px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1); z-index: 1;
-    border: 1px solid var(--border); border-radius: 4px; overflow: hidden;
+    display: none; position: absolute; right: 0; background-color: var(--surface); top: 100%; margin-top: 5px;
+    min-width: 180px; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); z-index: 100;
+    border: 1px solid var(--border); border-radius: 4px; overflow: visible;
+}
+.user-dropdown-content::before {
+    content: ''; position: absolute; top: -15px; left: 0; width: 100%; height: 15px; background: transparent;
 }
 .user-dropdown:hover .user-dropdown-content { display: block; }
 .user-dropdown-content a { color: var(--text-main); padding: 12px 16px; text-decoration: none; display: block; font-size: 14px; }
