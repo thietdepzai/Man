@@ -191,10 +191,6 @@ function closeProductModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-document.getElementById('product-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-// ... (phần trên giữ nguyên)
-
 // Thêm sự kiện lắng nghe khi người dùng chọn file ảnh mới để cập nhật ảnh xem trước (Preview)
 document.getElementById('prod-img').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -208,13 +204,13 @@ document.getElementById('prod-img').addEventListener('change', function(e) {
     }
 });
 
-function openProductModal() {
+document.getElementById('product-form').addEventListener('submit', function(e) {
+    e.preventDefault();
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
     
     // Vì đang dùng Input File thay vì text URL, nên ta cần bắt file name
-    // (Trong hệ thống Backend thực tế sẽ upload file, nhưng ở frontend tạm lưu đường dẫn public/images/...)
     const fileInput = document.getElementById('prod-img');
     let img = '';
     
