@@ -3,25 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') | Mặn Salt</title>
+    <title>@yield('title') | Mặn Salt - Premium Collection</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 <body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-logo">Mặn.</div>
+        <div class="preloader-bar">
+            <div class="preloader-progress"></div>
+        </div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
     <header class="header">
         <a href="{{ route('home') }}" class="logo">Mặn.</a>
         <nav class="nav-links">
-            <a href="{{ route('home') }}">Trang chủ</a>
-            <a href="{{ route('danh-muc') }}">Sản phẩm</a>
-            <a href="{{ route('tim-kiem') }}"><i class="fas fa-search"></i> Tìm kiếm</a>
+            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Trang chủ</a>
+            <a href="{{ route('danh-muc') }}" class="{{ request()->routeIs('danh-muc') ? 'active' : '' }}">Bộ sưu tập</a>
+            <a href="{{ route('tim-kiem') }}"><i class="fas fa-search"></i></a>
         </nav>
         <div class="header-actions">
             <div id="user-menu-container">
@@ -34,74 +43,76 @@
         </div>
     </header>
 
-    @yield('content')
+    <main id="main-content">
+        @yield('content')
+    </main>
 
     <footer class="footer">
-        <div class="footer-top">
-            <p>CONNECT WITH US<br><span class="social-handle">@MANSALT</span></p>
-        </div>
-        
-        <div class="footer-main">
-            <div class="footer-brand">
-                <a href="{{ route('home') }}" class="footer-logo">Mặn.</a>
-                <div class="footer-socials">
-                    <a href="#"><i class="fab fa-tiktok"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <h2>Mặn.</h2>
+                    <p style="opacity: 0.5; margin-top: 10px; font-weight: 300;">Essential Earthiness for Modern Kitchens.</p>
+                </div>
+                <div class="footer-nav">
+                    <div class="footer-column">
+                        <h4>Shop</h4>
+                        <ul>
+                            <li><a href="{{ route('danh-muc') }}">Tất cả sản phẩm</a></li>
+                            <li><a href="#">Muối đặc sản</a></li>
+                            <li><a href="#">Thảo mộc & Gia vị</a></li>
+                            <li><a href="#">Quà tặng</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Thông tin</h4>
+                        <ul>
+                            <li><a href="#">Về chúng tôi</a></li>
+                            <li><a href="#">Hệ thống cửa hàng</a></li>
+                            <li><a href="#">Liên hệ</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Hỗ trợ</h4>
+                        <ul>
+                            <li><a href="#">Chính sách giao hàng</a></li>
+                            <li><a href="#">Đổi trả & Hoàn tiền</a></li>
+                            <li><a href="#">Câu hỏi thường gặp</a></li>
+                            <li><a href="#">Điều khoản dịch vụ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Mặn Salt. All rights reserved.</p>
+                <div class="social-links" style="display: flex; gap: 20px;">
                     <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-tiktok"></i></a>
                 </div>
+                <p>Designed for Excellence</p>
             </div>
-            
-            <div class="footer-links-container">
-                <div class="footer-links">
-                    <ul>
-                        <li><a href="#">Về chúng tôi</a></li>
-                        <li><a href="#">Câu hỏi thường gặp</a></li>
-                        <li><a href="#">Chính sách Đổi/Trả</a></li>
-                        <li><a href="#">Điều khoản dịch vụ</a></li>
-                        <li><a href="#">Thẻ quà tặng</a></li>
-                    </ul>
-                </div>
-                <div class="footer-links">
-                    <ul>
-                        <li><a href="#" style="color: #ffffff;">Tiền tệ: <strong style="text-decoration: underline;">VND</strong> <i class="fas fa-chevron-down" style="font-size: 10px; margin-left: 4px;"></i></a></li>
-                        <li><a href="#">Tài khoản</a></li>
-                        <li><a href="#">Hệ thống cửa hàng</a></li>
-                        <li><a href="#">Liên hệ</a></li>
-                        <li><a href="#">Chính sách bảo mật</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-subscribe">
-                <h4>Tham gia bản tin Mặn Salt</h4>
-                <p>Hãy là người đầu tiên nhận thông tin về sản phẩm mới và khuyến mãi!</p>
-                <form class="subscribe-form" onsubmit="event.preventDefault(); Swal.fire('Thành công', 'Cảm ơn bạn đã đăng ký nhận bản tin!', 'success');">
-                    <input type="email" placeholder="Email của bạn" required>
-                    <button type="submit">ĐĂNG KÝ</button>
-                </form>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div><a href="#" style="color: inherit; text-decoration: none;">Điều khoản & Điều kiện</a></div>
-            <div>&copy; 2026 Mặn Salt. All rights reserved.</div>
         </div>
     </footer>
 
-    <!-- Pass routes to JS if needed -->
     <script>
         window.routes = {
             home: "{{ route('home') }}",
             login: "{{ route('login') }}",
             san_pham: "{{ route('san-pham') }}",
             don_hang: "{{ route('don-hang') }}",
-            admin: "{{ route('admin') }}"
+            admin: "{{ route('admin') }}",
+            danh_muc: "{{ route('danh-muc') }}",
+            gio_hang: "{{ route('gio-hang') }}"
         };
     </script>
+    
+    <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     
