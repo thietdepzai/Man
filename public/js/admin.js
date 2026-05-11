@@ -185,23 +185,61 @@ function closeProductModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-document.getElementById('product-form').addEventListener('submit', function(e) {
+document.getElementById('product-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
-    const img = document.getElementById('prod-img').value;
     const desc = document.getElementById('prod-desc').value;
+    const fileInput = document.getElementById('prod-img');
+    
+    let imgUrl = "";
+
+    // Nếu đang Edit thì mặc định giữ ảnh cũ
+    if(id) {
+        const p = products.find(x => x.id == id);
+        imgUrl = p.img;
+    }
+
+    // Nếu có chọn ảnh mới, tiến hành Upload lên PHP bằng AJAX
+    if (fileInput.files.length > 0) {
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+
+        try {
+            const res = await fetch('/admin/upload', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: formData
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                imgUrl = data.url; // Lấy URL ảnh đã được lưu từ Laravel
+            } else {
+                return Swal.fire('Lỗi', 'Lỗi tải ảnh: ' + (data.message || ''), 'error');
+            }
+        } catch (err) {
+            console.error(err);
+            return Swal.fire('Lỗi', 'Không thể kết nối đến máy chủ để tải ảnh.', 'error');
+        }
+    }
+
+    if (!imgUrl) {
+        return Swal.fire('Lỗi', 'Vui lòng chọn hình ảnh cho sản phẩm.', 'error');
+    }
     
     if(id) {
-        // Edit
+        // Cập nhật sản phẩm
         const p = products.find(x => x.id == id);
-        p.name = name; p.price = price; p.img = img; p.desc = desc;
+        p.name = name; p.price = price; p.img = imgUrl; p.desc = desc;
         Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
     } else {
-        // Add
+        // Thêm mới sản phẩm
         const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-        products.push({ id: newId, name, price, img, desc });
+        products.push({ id: newId, name, price, img: imgUrl, desc });
         Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
     }
     

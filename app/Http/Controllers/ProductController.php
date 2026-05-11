@@ -14,6 +14,22 @@ class ProductController extends Controller
         //
     }
 
+    public function uploadImage(Request $request)
+    {
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/products'), $filename);
+            
+            return response()->json([
+                'success' => true,
+                'url' => asset('uploads/products/' . $filename)
+            ]);
+        }
+
+        return response()->json(['success' => false, 'message' => 'Không tìm thấy file ảnh'], 400);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
