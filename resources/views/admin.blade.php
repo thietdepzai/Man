@@ -145,7 +145,7 @@
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh sản phẩm</label>
-                    <input type="file" id="prod-img" name="image" class="form-input" accept="image/*">
+                    <input type="file" id="prod-img" name="image" class="form-input" accept="image/*" required>
                     <div id="prod-img-preview" style="margin-top: 8px; display: none;">
                         <img id="prod-img-preview-img" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--admin-border);">
                     </div>

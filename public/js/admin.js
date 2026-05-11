@@ -2,12 +2,6 @@
 const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
 
 let products = JSON.parse(localStorage.getItem('products')) || [];
-
-// Đồng bộ lại nếu localStorage vẫn giữ dữ liệu cũ
-if (products.length < 16) {
-    localStorage.removeItem('products');
-    window.location.reload();
-}
 let orders = JSON.parse(localStorage.getItem('orders')) || [];
 
 function switchTab(tabId) {
@@ -181,8 +175,6 @@ function renderOrders() {
 function openProductModal() {
     document.getElementById('product-form').reset();
     document.getElementById('prod-id').value = '';
-    document.getElementById('prod-img-preview').style.display = 'none';
-    document.getElementById('prod-img-preview-img').src = '';
     document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
     document.getElementById('productModal').style.display = 'flex';
 }
@@ -191,51 +183,21 @@ function closeProductModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-// Thêm sự kiện lắng nghe khi người dùng chọn file ảnh mới để cập nhật ảnh xem trước (Preview)
-document.getElementById('prod-img').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            document.getElementById('prod-img-preview').style.display = 'block';
-            document.getElementById('prod-img-preview-img').src = event.target.result;
-        }
-        reader.readAsDataURL(file);
-    }
-});
-
 document.getElementById('product-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
-    
-    // Vì đang dùng Input File thay vì text URL, nên ta cần bắt file name
-    const fileInput = document.getElementById('prod-img');
-    let img = '';
-    
-    if (fileInput.files && fileInput.files[0]) {
-        // Tủ tạm đường dẫn /images/tên_file vì ta chỉ dùng JS
-        img = '/images/' + fileInput.files[0].name;
-    }
-
+    const img = document.getElementById('prod-img').value;
     const desc = document.getElementById('prod-desc').value;
     
     if(id) {
         // Edit
         const p = products.find(x => x.id == id);
-        p.name = name; 
-        p.price = price; 
-        p.desc = desc;
-        // Nếu người dùng chọn ảnh mới thì cập nhật, nếu không thì giữ y nguyên ảnh cũ
-        if (img !== '') {
-            p.img = img; 
-        }
+        p.name = name; p.price = price; p.img = img; p.desc = desc;
         Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
     } else {
         // Add
-        if (img === '') img = '/images/default.jpg'; // Ảnh mặc định nếu quên chọn
-
         const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
         products.push({ id: newId, name, price, img, desc });
         Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
@@ -252,12 +214,7 @@ window.editProduct = function(id) {
     document.getElementById('prod-id').value = p.id;
     document.getElementById('prod-name').value = p.name;
     document.getElementById('prod-price').value = p.price;
-    document.getElementById('prod-img').value = ''; // Không thể gán value cho input:file
-    
-    // Hiển thị ảnh cũ trong preview
-    document.getElementById('prod-img-preview').style.display = 'block';
-    document.getElementById('prod-img-preview-img').src = p.img;
-    
+    document.getElementById('prod-img').value = p.img;
     document.getElementById('prod-desc').value = p.desc;
     document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
     document.getElementById('productModal').style.display = 'flex';

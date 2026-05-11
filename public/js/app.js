@@ -1,27 +1,18 @@
 
 // --- Data ---
 const defaultProducts = [
-    { id: 1, name: "Muối Himalaya Nấm Truffle", price: 350000, img: "/images/muoi-himalaya-nam-truffle.jpg", desc: "Sự kết hợp tinh tế giữa muối hồng Himalaya nguyên bản và nấm Truffle đen hảo hạng (Hạt mịn - 8 oz). Tôn lên hương vị quyến rũ và sang trọng cho các món bít tết, hải sản." },
-    { id: 2, name: "Muối Himalaya", price: 120000, img: "/images/muoi-himalaya.jpg", desc: "Khai thác từ mỏ đá muối Himalaya cổ đại, tinh khiết 100% không pha tạp chất, giữ nguyên hơn 80 loại khoáng chất quý giá (Hạt mịn - 8 oz)." },
-    { id: 3, name: "Muối Biển Trắng", price: 80000, img: "/images/muoi-bien-trang.jpg", desc: "Muối biển sạch sấy khô tự nhiên, hạt mịn, vị mặn dịu thanh khiết, là gia vị không thể thiếu để nêm nếm các bữa ăn gia đình hằng ngày (Hạt mịn - 8 oz)." },
-    { id: 4, name: "Muối Diêm Mạch", price: 150000, img: "/images/muoi-diem-mach.jpg", desc: "Hương vị diêm mạch độc đáo, giàu dinh dưỡng, tự nhiên. Lựa chọn hoàn hảo cho chế độ ăn kiêng (Eat Clean) cân bằng khoáng chất (Khối lượng 226g / 8 oz)." },
-    { id: 5, name: "Muối Khói Gỗ Sồi", price: 180000, img: "/images/muoi-khoi-go-soi.jpg", desc: "Hương vị khói gỗ sồi đậm đà, độc đáo, cao cấp. Được hun khói thủ công, đem lại sự bùng nổ hương thơm BBQ cho món nướng (Khối lượng 226g / 8 oz)." },
-    { id: 6, name: "Muối Biển Tỏi", price: 110000, img: "/images/muoi-bien-toi.jpg", desc: "Hương vị nồng nàn, đậm đà từ muối biển nguyên chất ngâm ủ cùng tỏi tự nhiên, giúp đánh thức hương vị của mọi món ăn (Khối lượng 226g / 8 oz)." },
-    { id: 7, name: "Muối Chanh Vàng", price: 130000, img: "/images/muoi-chanh-vang.jpg", desc: "Hương vị chanh tươi thơm ngon, độc đáo. Rất nhẹ nhàng, thanh mát, là sự lựa chọn tuyệt vời cho các món hải sản và salad (Khối lượng 226g / 8 oz)." },
-    { id: 8, name: "Muối Nấm Truffle Đen", price: 280000, img: "/images/muoi-nam-truffle-den.jpg", desc: "Dòng muối biển kết hợp nấm Truffle đen đặc trưng. Bí quyết nâng tầm hương vị cao cấp, quyến rũ cho gian bếp nhà bạn (Hạt mịn - 8 oz)." },
-    { id: 9, name: "Muối Tre Việt Nam", price: 165000, img: "/images/muoi-tre-viet-nam.jpg", desc: "Đặc sản Việt Nam. Trải qua quy trình nung trong ống tre, mang lại hương vị độc đáo, giúp cân bằng độ pH cơ thể và rất tốt cho sức khỏe (Khối lượng 226g / 8 oz)." },
-    { id: 10, name: "Muối Biển Hạt To", price: 75000, img: "/images/muoi-bien-hat-to.jpg", desc: "Mang đậm hương vị biển tự nhiên. Hạt to trong suốt, giữ trọn khoáng chất cốt lõi, không chứa chất bảo quản (Khối lượng 226g / 8 oz)." },
-    { id: 11, name: "Muối Kiến Vàng", price: 190000, img: "/images/muoi-kien-vang.jpg", desc: "Đặc sản vùng đất Phú Yên. Hương vị độc đáo kết hợp tuyệt vời. Chấm với thịt nướng hay hải sản là ghiền ngay lập tức (Khối lượng 226g / 8 oz)." },
-    { id: 12, name: "Muối Hảo Hảo", price: 50000, img: "/images/muoi-hao-hao.jpg", desc: "Hương vị tôm chua cay truyền thống Việt. Sức hấp dẫn không thể chối từ, quen thuộc nhưng vẫn độc đáo, tự nhiên (Khối lượng 226g / 8 oz)." },
-    { id: 13, name: "Muối Tiêu Đen Nguyên Hạt", price: 140000, img: "/images/muoi-tieu-den-nguyen-hat.jpg", desc: "Hương vị tiêu đen nguyên hạt cay nhẹ và đậm đà tự nhiên. Gia vị hoàn hảo tẩm ướp thịt bò, dùng cho mọi món ngon cần điểm nhấn (Khối lượng 226g / 8 oz)." },
-    { id: 14, name: "Muối Biển Đen Tự Nhiên", price: 210000, img: "/images/muoi-bien-den.jpg", desc: "Dòng muối Kosher & Gourmet Salt tự nhiên. Đặc sản hiếm có từ Phú Yên, với hương vị và màu sắc nguyên bản, không chất bảo quản, khoáng chất tuyệt đỉnh." },
-    { id: 15, name: "Muối Biển Đỏ Tự Nhiên", price: 210000, img: "/images/muoi-bien-do.jpg", desc: "Kosher & Gourmet Salt đẳng cấp trải nghiệm. Lấy cảm hứng từ tự nhiên vùng Phú Yên, vị mặn dịu êm, màu sắc tinh tế, an toàn và hoàn toàn không bảo quản." },
-    { id: 16, name: "Muối Trúc Hàn Quốc Jukyeom", price: 320000, img: "/images/muoi-truc-han-quoc.jpg", desc: "Đặc sản nức tiếng Korean Bamboo Salt. Nung chuẩn 9 lần mang lại hàng loạt công dụng đáng kinh ngạc, siêu giàu khoáng chất cho cơ thể khỏe mạnh (Khối lượng 226g / 8 oz)." }
+    { id: 1, name: "Muối Hồng Himalaya Hạt Lớn", price: 150000, img: "https://images.unsplash.com/photo-1518110924446-24e5d8dce288?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối hồng Himalaya tinh khiết khai thác từ mỏ đá muối cổ đại, giữ nguyên khoáng chất tự nhiên." },
+    { id: 2, name: "Muối Biển Chấm Hoa Quả", price: 85000, img: "https://images.unsplash.com/photo-1623838421838-89c56fa98c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối biển sấy khô kết hợp ớt sừng và tôm khô, vị cay nồng đậm đà." },
+    { id: 3, name: "Muối Tiêu Đen Nguyên Hạt", price: 120000, img: "https://images.unsplash.com/photo-1596647248356-0798e945c115?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Sự kết hợp hoàn hảo giữa muối biển và tiêu đen Phú Quốc." },
+    { id: 4, name: "Muối Tỏi Thảo Mộc", price: 95000, img: "https://images.unsplash.com/photo-1605335122165-4fcd0339d1b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối ướp thịt tuyệt hảo với tỏi sấy và các loại thảo mộc Ý." },
+    { id: 5, name: "Muối Truffle Đen", price: 450000, img: "https://images.unsplash.com/photo-1621252178044-f254ee4bc710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Đỉnh cao ẩm thực với nấm Truffle đen từ Ý xay nhuyễn cùng muối biển." },
+    { id: 6, name: "Muối Chanh Vàng", price: 110000, img: "https://images.unsplash.com/photo-1587313632739-c894c2598d9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Vị chua thanh mát từ vỏ chanh vàng sấy lạnh." },
+    { id: 7, name: "Muối Khói Gỗ Sồi", price: 180000, img: "https://images.unsplash.com/photo-1616428751433-f57ec0968df7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Hun khói thủ công bằng gỗ sồi trong 48h, tạo hương vị BBQ đặc trưng." },
+    { id: 8, name: "Muối Diêm Mạch", price: 160000, img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Giàu protein và khoáng chất, kết hợp hoàn hảo cho chế độ ăn eat clean." }
 ];
 
 let products = JSON.parse(localStorage.getItem('products'));
-if (!products || products.length < 16) {
-    // Tự động làm mới dữ liệu nếu đang dùng dữ liệu cũ
+if (!products || products.length === 0) {
     products = defaultProducts;
     localStorage.setItem('products', JSON.stringify(products));
 }
