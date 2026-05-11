@@ -4,7 +4,7 @@ const formatPrice = (price) => new Intl.NumberFormat('vi-VN', { style: 'currency
 let products = JSON.parse(localStorage.getItem('products')) || [];
 
 // Đồng bộ lại nếu localStorage vẫn giữ dữ liệu cũ
-if (products.length > 0 && products[0].name === "Muối Hồng Himalaya Hạt Lớn") {
+if (products.length < 16) {
     localStorage.removeItem('products');
     window.location.reload();
 }
