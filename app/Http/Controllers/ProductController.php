@@ -98,7 +98,7 @@ class ProductController extends Controller
     {
         // ... (Logic validate và lưu các trường khác vào database) ...
 
-        // Xử lý upload ảnh khi update
+        // Xử lý upload ảnh hoặc nhận link ảnh trực tiếp
         if ($request->hasFile('image')) {
             try {
                 $file = $request->file('image');
@@ -112,6 +112,34 @@ class ProductController extends Controller
             } catch (\Exception $e) {
                 Log::error('Lỗi update ảnh: ' . $e->getMessage());
             }
+        } elseif ($request->filled('image_url')) {
+            // Nhận trực tiếp URL ảnh từ Imgur
+            $imagePath = $request->input('image_url');
+            // $product->image = $imagePath;
+        }
+
+        // ...
+    }
+        // ... (Logic validate và lưu các trường khác vào database) ...
+
+        // Xử lý upload ảnh hoặc nhận link ảnh trực tiếp
+        if ($request->hasFile('image')) {
+            try {
+                $file = $request->file('image');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/products'), $filename);
+                
+                $imagePath = 'uploads/products/' . $filename;
+                
+                // $product->image = $imagePath;
+                // $product->save();
+            } catch (\Exception $e) {
+                Log::error('Lỗi store ảnh: ' . $e->getMessage());
+            }
+        } elseif ($request->filled('image_url')) {
+            // Nhận trực tiếp URL ảnh từ máy khách (ví dụ: imgur URL)
+            $imagePath = $request->input('image_url');
+            // $product->image = $imagePath;
         }
 
         // ...
