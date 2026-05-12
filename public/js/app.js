@@ -1,18 +1,18 @@
 
 // --- Data ---
 const defaultProducts = [
-    { id: 1, name: "Muối Hồng Himalaya Hạt Lớn", price: 150000, img: "https://images.unsplash.com/photo-1518110924446-24e5d8dce288?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối hồng Himalaya tinh khiết khai thác từ mỏ đá muối cổ đại, giữ nguyên khoáng chất tự nhiên." },
-    { id: 2, name: "Muối Biển Chấm Hoa Quả", price: 85000, img: "https://images.unsplash.com/photo-1623838421838-89c56fa98c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối biển sấy khô kết hợp ớt sừng và tôm khô, vị cay nồng đậm đà." },
-    { id: 3, name: "Muối Tiêu Đen Nguyên Hạt", price: 120000, img: "https://images.unsplash.com/photo-1596647248356-0798e945c115?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Sự kết hợp hoàn hảo giữa muối biển và tiêu đen Phú Quốc." },
-    { id: 4, name: "Muối Tỏi Thảo Mộc", price: 95000, img: "https://images.unsplash.com/photo-1605335122165-4fcd0339d1b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối ướp thịt tuyệt hảo với tỏi sấy và các loại thảo mộc Ý." },
-    { id: 5, name: "Muối Truffle Đen", price: 450000, img: "https://images.unsplash.com/photo-1621252178044-f254ee4bc710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Đỉnh cao ẩm thực với nấm Truffle đen từ Ý xay nhuyễn cùng muối biển." },
-    { id: 6, name: "Muối Chanh Vàng", price: 110000, img: "https://images.unsplash.com/photo-1587313632739-c894c2598d9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Vị chua thanh mát từ vỏ chanh vàng sấy lạnh." },
-    { id: 7, name: "Muối Khói Gỗ Sồi", price: 180000, img: "https://images.unsplash.com/photo-1616428751433-f57ec0968df7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Hun khói thủ công bằng gỗ sồi trong 48h, tạo hương vị BBQ đặc trưng." },
-    { id: 8, name: "Muối Diêm Mạch", price: 160000, img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Giàu protein và khoáng chất, kết hợp hoàn hảo cho chế độ ăn eat clean." }
+    { id: 1, name: "Muối Hồng Himalaya Hạt Lớn", price: 150000, img: "https://images.unsplash.com/photo-1518110924446-24e5d8dce288?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối hồng Himalaya tinh khiết khai thác từ mỏ đá muối cổ đại, giữ nguyên khoáng chất tự nhiên.", category: "Muối Hồng Himalaya" },
+    { id: 2, name: "Muối Biển Chấm Hoa Quả", price: 85000, img: "https://images.unsplash.com/photo-1623838421838-89c56fa98c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối biển sấy khô kết hợp ớt sừng và tôm khô, vị cay nồng đậm đà.", category: "Muối Gia Vị" },
+    { id: 3, name: "Muối Tiêu Đen Nguyên Hạt", price: 120000, img: "https://images.unsplash.com/photo-1596647248356-0798e945c115?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Sự kết hợp hoàn hảo giữa muối biển và tiêu đen Phú Quốc.", category: "Muối Gia Vị" },
+    { id: 4, name: "Muối Tỏi Thảo Mộc", price: 95000, img: "https://images.unsplash.com/photo-1605335122165-4fcd0339d1b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối ướp thịt tuyệt hảo với tỏi sấy và các loại thảo mộc Ý.", category: "Muối Gia Vị" },
+    { id: 5, name: "Muối Truffle Đen", price: 450000, img: "https://images.unsplash.com/photo-1621252178044-f254ee4bc710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Đỉnh cao ẩm thực với nấm Truffle đen từ Ý xay nhuyễn cùng muối biển.", category: "Muối Biển Tinh Khiết" },
+    { id: 6, name: "Muối Chanh Vàng", price: 110000, img: "https://images.unsplash.com/photo-1587313632739-c894c2598d9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Vị chua thanh mát từ vỏ chanh vàng sấy lạnh.", category: "Muối Gia Vị" },
+    { id: 7, name: "Muối Khói Gỗ Sồi", price: 180000, img: "https://images.unsplash.com/photo-1616428751433-f57ec0968df7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Hun khói thủ công bằng gỗ sồi trong 48h, tạo hương vị BBQ đặc trưng.", category: "Muối Biển Tinh Khiết" },
+    { id: 8, name: "Muối Diêm Mạch", price: 160000, img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Giàu protein và khoáng chất, kết hợp hoàn hảo cho chế độ ăn eat clean.", category: "Muối Biển Tinh Khiết" }
 ];
 
 let products = JSON.parse(localStorage.getItem('products'));
-if (!products || products.length === 0) {
+if (!products || products.length === 0 || !products[0].category) {
     products = defaultProducts;
     localStorage.setItem('products', JSON.stringify(products));
 }
@@ -147,6 +147,78 @@ function renderProducts(containerId, limit = null) {
     if(!container) return;
     const items = limit ? products.slice(0, limit) : products;
     container.innerHTML = items.map(createProductCard).join('');
+}
+
+// --- Pagination and Category Logic ---
+let currentCategory = 'all';
+let currentPage = 1;
+const itemsPerPage = 4; // Display 4 items per page to show pages 1 and 2
+
+function initCatalog() {
+    const categories = ['all', ...new Set(products.map(p => p.category))];
+    const catList = document.getElementById('category-list');
+    
+    if (catList) {
+        catList.innerHTML = categories.map(cat => {
+            const label = cat === 'all' ? 'Tất cả' : cat;
+            return `<li><a href="#" onclick="setCategory('${cat}'); return false;" style="display:block;padding:12px 16px;border-radius:var(--radius-sm);color:var(--text-secondary);transition:all 0.2s;font-size:14px;" onmouseover="this.style.background='var(--bg-glass-hover)';this.style.color='var(--text-primary)'" onmouseout="if(currentCategory !== '${cat}') { this.style.background='';this.style.color='var(--text-secondary)' }" class="cat-link" data-cat="${cat}">${label}</a></li>`;
+        }).join('');
+    }
+    
+    renderCatalog();
+}
+
+function setCategory(cat) {
+    currentCategory = cat;
+    currentPage = 1;
+    renderCatalog();
+}
+
+function setPage(page) {
+    currentPage = page;
+    renderCatalog();
+}
+
+function renderCatalog() {
+    // Highlight active category
+    document.querySelectorAll('.cat-link').forEach(el => {
+        if (el.getAttribute('data-cat') === currentCategory) {
+            el.style.background = 'var(--bg-glass-hover)';
+            el.style.color = 'var(--text-primary)';
+        } else {
+            el.style.background = '';
+            el.style.color = 'var(--text-secondary)';
+        }
+    });
+
+    const filtered = currentCategory === 'all' ? products : products.filter(p => p.category === currentCategory);
+    
+    // Pagination
+    const totalPages = Math.ceil(filtered.length / itemsPerPage);
+    const startIdx = (currentPage - 1) * itemsPerPage;
+    const paginatedItems = filtered.slice(startIdx, startIdx + itemsPerPage);
+    
+    const container = document.getElementById('all-products');
+    if (container) {
+        if (paginatedItems.length === 0) {
+            container.innerHTML = '<p style="text-align:center;grid-column:1/-1;">Không tìm thấy sản phẩm nào.</p>';
+        } else {
+            container.innerHTML = paginatedItems.map(createProductCard).join('');
+        }
+    }
+    
+    // Render pagination controls
+    const pagContainer = document.getElementById('pagination-controls');
+    if (pagContainer) {
+        let pagHtml = '';
+        if (totalPages > 1) {
+            for (let i = 1; i <= totalPages; i++) {
+                const activeStyle = i === currentPage ? 'background:var(--accent);color:var(--bg-primary);' : 'background:transparent;color:var(--text-primary);border:1px solid var(--border);';
+                pagHtml += `<button onclick="setPage(${i})" style="width:36px;height:36px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;${activeStyle}">${i}</button>`;
+            }
+        }
+        pagContainer.innerHTML = pagHtml;
+    }
 }
 
 function initHome() {

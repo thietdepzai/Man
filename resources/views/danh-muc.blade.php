@@ -14,20 +14,25 @@
         <aside style="width:240px;flex-shrink:0;" data-aos="fade-right">
             <div style="position:sticky;top:100px;">
                 <h3 style="font-size:14px;text-transform:uppercase;letter-spacing:2px;margin-bottom:24px;color:var(--text-primary);">Danh mục</h3>
-                <ul style="display:flex;flex-direction:column;gap:4px;">
-                    <li><a href="#" style="display:block;padding:12px 16px;border-radius:var(--radius-sm);color:var(--text-secondary);transition:all 0.2s;font-size:14px;" onmouseover="this.style.background='var(--bg-glass-hover)';this.style.color='var(--text-primary)'" onmouseout="this.style.background='';this.style.color='var(--text-secondary)'">Muối Hồng Himalaya</a></li>
-                    <li><a href="#" style="display:block;padding:12px 16px;border-radius:var(--radius-sm);color:var(--text-secondary);transition:all 0.2s;font-size:14px;" onmouseover="this.style.background='var(--bg-glass-hover)';this.style.color='var(--text-primary)'" onmouseout="this.style.background='';this.style.color='var(--text-secondary)'">Muối Biển Tinh Khiết</a></li>
-                    <li><a href="#" style="display:block;padding:12px 16px;border-radius:var(--radius-sm);color:var(--text-secondary);transition:all 0.2s;font-size:14px;" onmouseover="this.style.background='var(--bg-glass-hover)';this.style.color='var(--text-primary)'" onmouseout="this.style.background='';this.style.color='var(--text-secondary)'">Muối Gia Vị</a></li>
+                <ul id="category-list" style="display:flex;flex-direction:column;gap:4px;">
+                    <!-- Categories will be rendered here -->
                 </ul>
             </div>
         </aside>
         <div style="flex:1;">
             <div class="grid-4" id="all-products" data-aos="fade-up"></div>
+            
+            <!-- Pagination Controls -->
+            <div id="pagination-controls" style="display:flex;justify-content:center;gap:8px;margin-top:48px;">
+                <!-- Pagination buttons will be rendered here -->
+            </div>
         </div>
     </section>
 
 @endsection
 
 @push('scripts')
-<script>renderProducts('all-products');</script>
+<script>
+    initCatalog();
+</script>
 @endpush
