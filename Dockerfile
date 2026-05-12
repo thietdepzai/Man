@@ -49,7 +49,7 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
 # Tạo symlink cho storage để ảnh hiển thị công khai được
-RUN php artisan storage:link
+RUN rm -rf /var/www/html/public/storage && php artisan storage:link
 
 # Expose port 80 cho web server
 EXPOSE 80

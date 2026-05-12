@@ -38,8 +38,8 @@ class ProductController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             
-            // Lưu vào storage/app/public/uploads/products
-            $image->storeAs('public/uploads/products', $imageName);
+            // Lưu vào storage/app/public/uploads/products (sử dụng disk 'public')
+            $image->storeAs('uploads/products', $imageName, 'public');
             
             return response()->json([
                 'success' => true,
