@@ -43,11 +43,10 @@
                 <p style="color:var(--text-secondary);line-height:1.9;margin-bottom:32px;">Mỗi hạt muối Mặn là kết tinh của nắng gió, sóng biển và bàn tay khéo léo của những người thợ thủ công lâu đời. Chúng tôi cam kết mang đến hương vị tinh khiết nhất.</p>
                 <a href="#" class="btn btn-outline btn-sm">Tìm Hiểu Thêm</a>
             </div>
-            <div style="flex:1;min-width:300px;height:400px;border-radius:var(--radius-lg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;">
-                <img src="https://images.unsplash.com/photo-1615486511484-90f772ba00bb?auto=format&fit=crop&q=80&w=800" alt="Sea Salt Artisan" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0;z-index:1;">
-                <div style="position:relative;z-index:2;background:rgba(18, 18, 18, 0.4);border-radius:50%;width:120px;height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px);">
-                    <i class="fas fa-water" style="font-size:32px;margin-bottom:8px;color:#fff;opacity:0.9;"></i>
-                    <p style="font-size:10px;text-transform:uppercase;letter-spacing:2px;color:#fff;margin:0;text-align:center;">Artisan</p>
+            <div style="flex:1;min-width:300px;height:400px;background:linear-gradient(135deg,var(--bg-tertiary),var(--bg-primary));border-radius:var(--radius-lg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;overflow:hidden;">
+                <div style="text-align:center;color:var(--text-muted);">
+                    <i class="fas fa-water" style="font-size:48px;margin-bottom:16px;color:var(--accent);opacity:0.5;"></i>
+                    <p style="font-size:13px;text-transform:uppercase;letter-spacing:3px;">Sea Salt Artisan</p>
                 </div>
             </div>
         </div>
