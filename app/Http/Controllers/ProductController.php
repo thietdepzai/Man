@@ -37,11 +37,13 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $path = $image->storeAs('public/uploads/products', $imageName);
+            
+            // Chuyển ảnh trực tiếp vào thư mục public/uploads/products để không cần dùng storage:link
+            $image->move(public_path('uploads/products'), $imageName);
             
             return response()->json([
                 'success' => true,
-                'url' => asset('storage/uploads/products/' . $imageName)
+                'url' => '/uploads/products/' . $imageName
             ]);
         }
 
