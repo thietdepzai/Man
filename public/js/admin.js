@@ -435,3 +435,49 @@ window.selectGalleryImage = function(url) {
     
     closeGalleryModal();
 }
+
+window.handleBulkUpload = async function(e) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+        formData.append('images[]', files[i]);
+    }
+
+    const statusText = document.getElementById('bulk-upload-status');
+    statusText.style.color = '#4a5568';
+    statusText.innerText = 'Đang tải lên ' + files.length + ' ảnh...';
+
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const response = await fetch('/admin/upload-multiple', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            statusText.style.color = 'green';
+            statusText.innerText = 'Tải lên thành công!';
+            setTimeout(() => { statusText.innerText = ''; }, 3000);
+            
+            // Reload the gallery interface
+            openGalleryModal();
+        } else {
+            Swal.fire('Lỗi', data.message || 'Lỗi tải ảnh', 'error');
+            statusText.innerText = '';
+        }
+    } catch (error) {
+        console.error(error);
+        Swal.fire('Lỗi', 'Không thể kết nối đến server hoặc đường truyền lỗi', 'error');
+        statusText.innerText = '';
+    }
+    
+    // Clear the input value so user can upload the same files again if needed
+    e.target.value = '';
+}

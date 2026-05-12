@@ -54,6 +54,36 @@ class ProductController extends Controller
     }
 
     /**
+     * Upload nhiều ảnh vào kho
+     */
+    public function uploadMultipleImages(Request $request)
+    {
+        $request->validate([
+            'images' => 'required|array',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        $urls = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                // Thêm uniqid() để tránh trùng tên khi tải lên nhiều file cùng lúc
+                $imageName = time() . '_' . uniqid() . '_' . $image->getClientOriginalName();
+                $image->storeAs('uploads/products', $imageName, 'public');
+                $urls[] = '/storage/uploads/products/' . $imageName;
+            }
+            return response()->json([
+                'success' => true,
+                'urls' => $urls
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Lỗi tải ảnh'
+        ], 400);
+    }
+
+    /**
      * Lấy danh sách ảnh đã upload trong kho
      */
     public function getGallery()

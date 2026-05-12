@@ -184,6 +184,15 @@
                 <h2>Kho Ảnh</h2>
                 <button class="btn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeGalleryModal()">&times;</button>
             </div>
+            
+            <div style="margin-bottom: 16px; display: flex; align-items: center;">
+                <input type="file" id="bulk-upload-input" multiple accept="image/*" style="display: none;" onchange="handleBulkUpload(event)">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('bulk-upload-input').click()">
+                    <i class="fas fa-upload"></i> Tải nhiều ảnh từ máy
+                </button>
+                <div id="bulk-upload-status" style="margin-left: 12px; font-size: 14px; font-weight: 500;"></div>
+            </div>
+
             <div id="gallery-loading" style="text-align: center; padding: 20px;">Đang tải...</div>
             <div id="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; max-height: 400px; overflow-y: auto;">
                 <!-- Images will be rendered here -->
