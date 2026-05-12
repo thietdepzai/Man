@@ -190,8 +190,14 @@ document.getElementById('product-form').addEventListener('submit', function(e) {
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
-    const img = document.getElementById('prod-img').value;
+    let img = document.getElementById('prod-img').value.trim();
     const desc = document.getElementById('prod-desc').value;
+    
+    // Tự động chuyển đổi link ảnh Google Drive sang direct link
+    const gDriveMatch = img.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (gDriveMatch && gDriveMatch[1]) {
+        img = `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+    }
     
     if(id) {
         // Edit
@@ -290,7 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // --- Image URL Preview ---
 document.getElementById('prod-img').addEventListener('input', function() {
-    const url = this.value.trim();
+    let url = this.value.trim();
+    
+    // Tự động chuyển đổi link ảnh Google Drive sang direct link để hiển thị preview
+    const gDriveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (gDriveMatch && gDriveMatch[1]) {
+        url = `https://drive.google.com/uc?export=view&id=${gDriveMatch[1]}`;
+        this.value = url; // Update input field
+    }
+
     const preview = document.getElementById('prod-img-preview');
     const previewImg = document.getElementById('prod-img-preview-img');
 
