@@ -27,23 +27,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // ... (Logic validate và lưu các trường khác vào database) ...
-
-        // Xử lý upload ảnh
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/products'), $filename);
-            
-            // Cập nhật đường dẫn file vào cơ sở dữ liệu
-            $imagePath = 'uploads/products/' . $filename;
-            
-            // Ví dụ lưu vào DB: 
-            // $product->image = $imagePath;
-            // $product->save();
-        }
-
-        // ...
+        //
     }
 
     /**
@@ -67,23 +51,7 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // ... (Logic validate và lưu các trường khác vào database) ...
-
-        // Xử lý upload ảnh khi update
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/products'), $filename);
-            
-            // Cập nhật đường dẫn file vào cơ sở dữ liệu
-            $imagePath = 'uploads/products/' . $filename;
-            
-            // Ví dụ lưu vào DB:
-            // $product->image = $imagePath;
-            // $product->save();
-        }
-
-        // ...
+        //
     }
 
     /**
