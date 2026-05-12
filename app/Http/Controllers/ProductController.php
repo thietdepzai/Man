@@ -38,12 +38,12 @@ class ProductController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             
-            // Chuyển ảnh trực tiếp vào thư mục public/uploads/products để không cần dùng storage:link
-            $image->move(public_path('uploads/products'), $imageName);
+            // Lưu vào storage/app/public/uploads/products
+            $image->storeAs('public/uploads/products', $imageName);
             
             return response()->json([
                 'success' => true,
-                'url' => '/uploads/products/' . $imageName
+                'url' => '/storage/uploads/products/' . $imageName
             ]);
         }
 
