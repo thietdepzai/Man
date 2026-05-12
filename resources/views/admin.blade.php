@@ -145,30 +145,9 @@
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh sản phẩm</label>
-                    <!-- Upload từ máy tính -->
-                    <div id="upload-drop-zone" style="border: 2px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.3s; margin-bottom: 8px; background: rgba(255,255,255,0.03);">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 28px; color: var(--admin-accent); margin-bottom: 8px;"></i>
-                        <p style="margin: 0; color: #a0aec0; font-size: 14px;">Kéo thả ảnh vào đây hoặc <span style="color: var(--admin-accent); text-decoration: underline;">chọn từ máy</span></p>
-                        <p style="margin: 4px 0 0; color: #4a5568; font-size: 12px;">JPEG, PNG, GIF, WebP — tối đa 5MB</p>
-                    </div>
-                    <input type="file" id="prod-img-file" accept="image/*" style="display: none;">
-                    <input type="hidden" id="prod-img" value="">
-                    <!-- Upload progress -->
-                    <div id="upload-progress" style="display: none; margin-top: 8px;">
-                        <div style="background: rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; height: 6px;">
-                            <div id="upload-progress-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--admin-accent), #48bb78); transition: width 0.3s; border-radius: 8px;"></div>
-                        </div>
-                        <p id="upload-status" style="color: #a0aec0; font-size: 12px; margin-top: 4px;">Đang tải lên...</p>
-                    </div>
-                    <!-- Hoặc dán link -->
-                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
-                        <span style="color: #4a5568; font-size: 12px;">hoặc</span>
-                        <input type="url" id="prod-img-url" class="form-input" placeholder="Dán link ảnh: https://i.ibb.co/..." style="flex: 1; font-size: 13px;">
-                    </div>
-                    <!-- Preview -->
-                    <div id="prod-img-preview" style="margin-top: 10px; display: none; position: relative;">
-                        <img id="prod-img-preview-img" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                        <button type="button" id="remove-img-btn" onclick="removeImage()" style="position: absolute; top: -8px; right: -8px; background: #e53e3e; border: none; color: white; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times"></i></button>
+                    <input type="url" id="prod-img" class="form-input" placeholder="Dán link ảnh tại đây, ví dụ: https://i.ibb.co/..." required>
+                    <div id="prod-img-preview" style="margin-top: 8px; display: none;">
+                        <img id="prod-img-preview-img" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--admin-border);">
                     </div>
                 </div>
                 <div class="form-group">
