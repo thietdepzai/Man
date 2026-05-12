@@ -223,10 +223,24 @@ document.getElementById('product-form').addEventListener('submit', async functio
             const response = await fetch('/admin/upload', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
                 },
                 body: formData
             });
+            
+            if (!response.ok) {
+                let errorMsg = 'Lỗi máy chủ';
+                try {
+                    const errorData = await response.json();
+                    errorMsg = errorData.message || (errorData.errors ? Object.values(errorData.errors)[0][0] : 'Lỗi máy chủ');
+                } catch(e) {
+                    errorMsg = 'Lỗi server (Mã: ' + response.status + ')';
+                }
+                Swal.fire('Lỗi', errorMsg, 'error');
+                return;
+            }
+
             const data = await response.json();
             if (data.success) {
                 imgPath = data.url;
@@ -235,7 +249,8 @@ document.getElementById('product-form').addEventListener('submit', async functio
                 return;
             }
         } catch (error) {
-            Swal.fire('Lỗi', 'Không thể kết nối đến server', 'error');
+            console.error(error);
+            Swal.fire('Lỗi', 'Không thể kết nối đến server hoặc lỗi mạng', 'error');
             return;
         }
     }
