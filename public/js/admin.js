@@ -176,7 +176,8 @@ function openProductModal() {
     document.getElementById('product-form').reset();
     document.getElementById('prod-id').value = '';
     document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
-    document.getElementById('prod-img').required = true;
+    document.getElementById('prod-img').value = '';
+    document.getElementById('prod-img-url').value = '';
     document.getElementById('prod-img-preview').style.display = 'none';
     document.getElementById('productModal').style.display = 'flex';
 }
@@ -185,6 +186,9 @@ document.getElementById('prod-img').addEventListener('change', function(e) {
     const file = e.target.files[0];
     const previewDiv = document.getElementById('prod-img-preview');
     const previewImg = document.getElementById('prod-img-preview-img');
+    
+    // Xóa URL ảnh đã chọn từ Kho khi chọn file mới từ máy
+    document.getElementById('prod-img-url').value = '';
     
     if (file) {
         const reader = new FileReader();
@@ -210,10 +214,10 @@ document.getElementById('product-form').addEventListener('submit', async functio
     const price = parseInt(document.getElementById('prod-price').value);
     const desc = document.getElementById('prod-desc').value;
     
-    let imgPath = '';
+    let imgPath = document.getElementById('prod-img-url').value; // Lấy từ url kho ảnh nếu có
     const imgFile = document.getElementById('prod-img').files[0];
     
-    // Nếu có file ảnh mới thì upload
+    // Nếu có file ảnh mới tải lên từ máy thì ưu tiên upload
     if (imgFile) {
         const formData = new FormData();
         formData.append('image', imgFile);
@@ -264,7 +268,7 @@ document.getElementById('product-form').addEventListener('submit', async functio
     } else {
         // Add
         if (!imgPath) {
-            Swal.fire('Lỗi', 'Vui lòng chọn ảnh', 'error');
+            Swal.fire('Lỗi', 'Vui lòng chọn ảnh hoặc tải ảnh lên', 'error');
             return;
         }
         const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
@@ -285,7 +289,7 @@ window.editProduct = function(id) {
     document.getElementById('prod-price').value = p.price;
     // Không gán .value cho input type="file", thay vào đó xóa giá trị cũ và chỉ bắt buộc tải ảnh mới khi thêm mới
     document.getElementById('prod-img').value = '';
-    document.getElementById('prod-img').required = false; 
+    document.getElementById('prod-img-url').value = p.img || ''; 
     document.getElementById('prod-desc').value = p.desc;
     document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
     
@@ -294,7 +298,7 @@ window.editProduct = function(id) {
     const previewImg = document.getElementById('prod-img-preview-img');
     if (p.img) {
         previewImg.src = p.img;
-        previewDiv.style.display = 'block';
+        previewDiv.style.display = 'inline-block';
     } else {
         previewDiv.style.display = 'none';
     }
@@ -369,3 +373,65 @@ document.getElementById('prod-img').addEventListener('input', function() {
         preview.style.display = 'none';
     }
 });
+
+// --- Gallery Functions ---
+async function openGalleryModal() {
+    document.getElementById('galleryModal').style.display = 'flex';
+    const grid = document.getElementById('gallery-grid');
+    const loading = document.getElementById('gallery-loading');
+    
+    grid.innerHTML = '';
+    loading.style.display = 'block';
+    
+    try {
+        const response = await fetch('/admin/gallery');
+        const data = await response.json();
+        
+        loading.style.display = 'none';
+        
+        if (data.success && data.images.length > 0) {
+            data.images.forEach(img => {
+                const item = document.createElement('div');
+                item.style.cursor = 'pointer';
+                item.style.borderRadius = '8px';
+                item.style.overflow = 'hidden';
+                item.style.border = '2px solid transparent';
+                item.style.transition = 'border 0.2s';
+                
+                item.onmouseover = () => item.style.border = '2px solid var(--admin-accent)';
+                item.onmouseout = () => item.style.border = '2px solid transparent';
+                
+                item.onclick = () => selectGalleryImage(img.url);
+                
+                item.innerHTML = `
+                    <div style="background-image: url('${img.url}'); background-size: cover; background-position: center; height: 120px; width: 100%;"></div>
+                    <div style="padding: 4px; font-size: 12px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${img.name}">${img.name}</div>
+                `;
+                grid.appendChild(item);
+            });
+        } else {
+            grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: #718096; padding: 40px;">Thư viện trống. Chưa có ảnh nào được tải lên.</div>';
+        }
+    } catch (error) {
+        console.error(error);
+        loading.style.display = 'none';
+        grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; color: red;">Lỗi tải thư viện ảnh.</div>';
+    }
+}
+
+function closeGalleryModal() {
+    document.getElementById('galleryModal').style.display = 'none';
+}
+
+function selectGalleryImage(url) {
+    document.getElementById('prod-img-url').value = url;
+    document.getElementById('prod-img').value = ''; // Xoá file đang chọn nếu có
+    
+    const previewDiv = document.getElementById('prod-img-preview');
+    const previewImg = document.getElementById('prod-img-preview-img');
+    
+    previewImg.src = url;
+    previewDiv.style.display = 'inline-block';
+    
+    closeGalleryModal();
+}

@@ -54,6 +54,39 @@ class ProductController extends Controller
     }
 
     /**
+     * Lấy danh sách ảnh đã upload trong kho
+     */
+    public function getGallery()
+    {
+        $directory = storage_path('app/public/uploads/products');
+        
+        if (!file_exists($directory)) {
+            return response()->json(['success' => true, 'images' => []]);
+        }
+
+        $files = \File::files($directory);
+        $images = [];
+
+        foreach ($files as $file) {
+            $images[] = [
+                'name' => $file->getFilename(),
+                'url' => '/storage/uploads/products/' . $file->getFilename(),
+                'time' => $file->getCTime()
+            ];
+        }
+
+        // Sắp xếp ảnh mới nhất lên đầu
+        usort($images, function($a, $b) {
+            return $b['time'] <=> $a['time'];
+        });
+
+        return response()->json([
+            'success' => true,
+            'images' => $images
+        ]);
+    }
+
+    /**
      * Display the specified resource.
      */
     public function show(string $id)

@@ -44,5 +44,6 @@ Route::get('/admin', function () {
 
 use App\Http\Controllers\ProductController;
 Route::post('/admin/upload', [ProductController::class, 'uploadImage'])->name('admin.upload');
+Route::get('/admin/gallery', [ProductController::class, 'getGallery'])->name('admin.gallery');
 
 

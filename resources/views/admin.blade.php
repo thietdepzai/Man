@@ -145,8 +145,12 @@
                 </div>
                 <div class="form-group">
                     <label>Hình ảnh sản phẩm</label>
-                    <input type="file" id="prod-img" class="form-input" accept="image/*" required>
-                    <div id="prod-img-preview" style="margin-top: 8px; display: none;">
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+                        <input type="file" id="prod-img" class="form-input" accept="image/*" style="flex: 1;">
+                        <button type="button" class="btn" onclick="openGalleryModal()" style="white-space: nowrap; background: #e2e8f0; color: #4a5568;"><i class="fas fa-images"></i> Kho ảnh</button>
+                    </div>
+                    <input type="hidden" id="prod-img-url">
+                    <div id="prod-img-preview" style="margin-top: 8px; display: none; position: relative; display: inline-block;">
                         <img id="prod-img-preview-img" src="" alt="Preview" style="max-height: 120px; border-radius: 8px; border: 1px solid var(--admin-border);">
                     </div>
                 </div>
@@ -169,6 +173,23 @@
             <div id="order-detail-content"></div>
             <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
                 <button class="btn btn-primary" onclick="document.getElementById('orderModal').style.display='none'">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gallery Modal -->
+    <div class="modal" id="galleryModal" style="z-index: 2000;">
+        <div class="modal-content" style="max-width: 800px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                <h2>Kho Ảnh</h2>
+                <button class="btn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;" onclick="closeGalleryModal()">&times;</button>
+            </div>
+            <div id="gallery-loading" style="text-align: center; padding: 20px;">Đang tải...</div>
+            <div id="gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; max-height: 400px; overflow-y: auto;">
+                <!-- Images will be rendered here -->
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 24px;">
+                <button class="btn" onclick="closeGalleryModal()">Đóng</button>
             </div>
         </div>
     </div>
