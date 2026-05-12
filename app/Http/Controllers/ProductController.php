@@ -24,9 +24,9 @@ class ProductController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $destinationPath = public_path('uploads/products');
 
-                // Kiểm tra và tạo thư mục nếu chưa tồn tại, cấp quyền 0775
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0775, true, true);
+                // Kiểm tra và tạo thư mục nếu chưa tồn tại, cấp quyền 0777
+                if (!File::isDirectory($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0777, true, true);
                 }
 
                 $file->move($destinationPath, $filename);
@@ -70,8 +70,8 @@ class ProductController extends Controller
                 $destinationPath = public_path('uploads/products');
 
                 // Tự động tạo thư mục nếu chưa có
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0775, true, true);
+                if (!File::isDirectory($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0777, true, true);
                 }
 
                 $file->move($destinationPath, $filename);
@@ -119,8 +119,8 @@ class ProductController extends Controller
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $destinationPath = public_path('uploads/products');
 
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0775, true, true);
+                if (!File::isDirectory($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0777, true, true);
                 }
 
                 $file->move($destinationPath, $filename);
