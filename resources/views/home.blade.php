@@ -9,13 +9,11 @@
         <div class="swiper-wrapper">
             <div class="swiper-slide" style="background: url('{{ asset('images/hero-salt.png') }}') center/cover;">
                 <div class="hero-overlay"></div>
-                <div class="hero-content">
-                    <div data-aos="fade-up" data-aos-duration="1200">
-                        <p style="font-size:13px;text-transform:uppercase;letter-spacing:4px;color:var(--accent);margin-bottom:16px;font-weight:500;">Bộ Sưu Tập 2026</p>
-                        <h1 class="hero-title">Essential Earthiness</h1>
-                        <p class="hero-subtitle">Khám phá hương vị nguyên bản của muối biển thủ công cao cấp — tinh khiết từ thiên nhiên Việt Nam.</p>
-                        <a href="{{ route('danh-muc') }}" class="btn btn-primary">Khám Phá Ngay</a>
-                    </div>
+                <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+                    <p style="font-size:13px;text-transform:uppercase;letter-spacing:4px;color:var(--accent);margin-bottom:16px;font-weight:500;">Bộ Sưu Tập 2026</p>
+                    <h1 class="hero-title">Essential Earthiness</h1>
+                    <p class="hero-subtitle">Khám phá hương vị nguyên bản của muối biển thủ công cao cấp — tinh khiết từ thiên nhiên Việt Nam.</p>
+                    <a href="{{ route('danh-muc') }}" class="btn btn-primary">Khám Phá Ngay</a>
                 </div>
             </div>
         </div>

@@ -176,8 +176,6 @@ function openProductModal() {
     document.getElementById('product-form').reset();
     document.getElementById('prod-id').value = '';
     document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
-    document.getElementById('prod-img').required = true;
-    document.getElementById('prod-img-preview').style.display = 'none';
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -185,61 +183,23 @@ function closeProductModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-document.getElementById('product-form').addEventListener('submit', async function(e) {
+document.getElementById('product-form').addEventListener('submit', function(e) {
     e.preventDefault();
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
+    const img = document.getElementById('prod-img').value;
     const desc = document.getElementById('prod-desc').value;
-    const fileInput = document.getElementById('prod-img');
-    
-    let imgUrl = "";
-
-    // Nếu đang Edit thì mặc định giữ ảnh cũ
-    if(id) {
-        const p = products.find(x => x.id == id);
-        imgUrl = p.img;
-    }
-
-    // Nếu có chọn ảnh mới, tiến hành Upload lên PHP bằng AJAX
-    if (fileInput.files.length > 0) {
-        const formData = new FormData();
-        formData.append('image', fileInput.files[0]);
-
-        try {
-            const res = await fetch('/admin/upload', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: formData
-            });
-            const data = await res.json();
-            
-            if (data.success) {
-                imgUrl = data.url; // Lấy URL ảnh đã được lưu qua Laravel
-            } else {
-                return Swal.fire('Lỗi', 'Lỗi tải ảnh: ' + (data.message || ''), 'error');
-            }
-        } catch (err) {
-            console.error(err);
-            return Swal.fire('Lỗi', 'Không thể kết nối đến máy chủ để tải ảnh.', 'error');
-        }
-    }
-
-    if (!imgUrl) {
-        return Swal.fire('Lỗi', 'Vui lòng chọn hình ảnh cho sản phẩm.', 'error');
-    }
     
     if(id) {
-        // Cập nhật sản phẩm
+        // Edit
         const p = products.find(x => x.id == id);
-        p.name = name; p.price = price; p.img = imgUrl; p.desc = desc;
+        p.name = name; p.price = price; p.img = img; p.desc = desc;
         Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
     } else {
-        // Thêm mới sản phẩm
+        // Add
         const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-        products.push({ id: newId, name, price, img: imgUrl, desc });
+        products.push({ id: newId, name, price, img, desc });
         Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
     }
     
@@ -254,22 +214,9 @@ window.editProduct = function(id) {
     document.getElementById('prod-id').value = p.id;
     document.getElementById('prod-name').value = p.name;
     document.getElementById('prod-price').value = p.price;
-    // Không gán .value cho input type="file", thay vào đó xóa giá trị cũ và chỉ bắt buộc tải ảnh mới khi thêm mới
-    document.getElementById('prod-img').value = '';
-    document.getElementById('prod-img').required = false; 
+    document.getElementById('prod-img').value = p.img;
     document.getElementById('prod-desc').value = p.desc;
     document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
-    
-    // Hiển thị ảnh preview nếu có
-    const previewDiv = document.getElementById('prod-img-preview');
-    const previewImg = document.getElementById('prod-img-preview-img');
-    if (p.img) {
-        previewImg.src = p.img;
-        previewDiv.style.display = 'block';
-    } else {
-        previewDiv.style.display = 'none';
-    }
-
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -326,24 +273,17 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
 });
 
-// --- Image File Preview ---
-document.getElementById('prod-img').addEventListener('change', function(e) {
-    const file = e.target.files[0];
+// --- Image URL Preview ---
+document.getElementById('prod-img').addEventListener('input', function() {
+    const url = this.value.trim();
     const preview = document.getElementById('prod-img-preview');
     const previewImg = document.getElementById('prod-img-preview-img');
 
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            previewImg.src = e.target.result;
-            preview.style.display = 'block';
-        }
-        reader.readAsDataURL(file);
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        previewImg.src = url;
+        previewImg.onload = () => { preview.style.display = 'block'; };
+        previewImg.onerror = () => { preview.style.display = 'none'; };
     } else {
-        // Nếu không chọn file, có thể ẩn đi hoặc giữ nguyên ảnh cũ nếu đang chỉnh sửa
-        if (!document.getElementById('prod-id').value) {
-            preview.style.display = 'none';
-            previewImg.src = '';
-        }
+        preview.style.display = 'none';
     }
 });
