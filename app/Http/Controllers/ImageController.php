@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ImageController extends Controller
 {
     /**
-     * Upload ảnh lên imgBB (cloud) - hoạt động trên Render
+     * Upload ảnh - ưu tiên imgBB, fallback lưu local
      */
     public function upload(Request $request)
     {
@@ -21,44 +23,60 @@ class ImageController extends Controller
             return response()->json(['success' => false, 'message' => 'Không tìm thấy file ảnh'], 400);
         }
 
+        $image = $request->file('image');
         $apiKey = env('IMGBB_API_KEY');
 
-        if (!$apiKey) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Chưa cấu hình IMGBB_API_KEY trong file .env'
-            ], 500);
+        // --- Nếu có imgBB API key → upload lên cloud ---
+        if ($apiKey) {
+            try {
+                $base64Image = base64_encode(file_get_contents($image->getRealPath()));
+
+                $response = Http::asForm()->post('https://api.imgbb.com/1/upload', [
+                    'key'   => $apiKey,
+                    'image' => $base64Image,
+                    'name'  => pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME),
+                ]);
+
+                $result = $response->json();
+
+                if ($response->successful() && isset($result['data']['url'])) {
+                    return response()->json([
+                        'success' => true,
+                        'name'    => $result['data']['title'] ?? $image->getClientOriginalName(),
+                        'url'     => $result['data']['display_url'],
+                    ]);
+                }
+            } catch (\Exception $e) {
+                // imgBB fail → fallback xuống local
+            }
         }
 
+        // --- Fallback: Lưu ảnh vào local storage ---
         try {
-            $image = $request->file('image');
-            $base64Image = base64_encode(file_get_contents($image->getRealPath()));
+            $filename = time() . '_' . Str::slug(pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME))
+                        . '.' . $image->getClientOriginalExtension();
 
-            $response = Http::asForm()->post('https://api.imgbb.com/1/upload', [
-                'key'   => $apiKey,
-                'image' => $base64Image,
-                'name'  => pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME),
-            ]);
-
-            $result = $response->json();
-
-            if ($response->successful() && isset($result['data']['url'])) {
-                return response()->json([
-                    'success' => true,
-                    'name'    => $result['data']['title'] ?? $image->getClientOriginalName(),
-                    'url'     => $result['data']['display_url'],
-                ]);
+            // Tạo thư mục uploads nếu chưa có
+            $uploadPath = public_path('uploads');
+            if (!File::isDirectory($uploadPath)) {
+                File::makeDirectory($uploadPath, 0755, true);
             }
 
+            // Di chuyển file vào public/uploads
+            $image->move($uploadPath, $filename);
+
+            $url = asset('uploads/' . $filename);
+
             return response()->json([
-                'success' => false,
-                'message' => $result['error']['message'] ?? 'Upload lên imgBB thất bại',
-            ], 500);
+                'success' => true,
+                'name'    => $image->getClientOriginalName(),
+                'url'     => $url,
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Lỗi kết nối imgBB: ' . $e->getMessage(),
+                'message' => 'Lỗi lưu ảnh: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -72,10 +90,15 @@ class ImageController extends Controller
     }
 
     /**
-     * Xóa ảnh (không cần thiết khi dùng imgBB free)
+     * Xóa ảnh
      */
     public function destroy($filename)
     {
-        return response()->json(['success' => true, 'message' => 'Ảnh trên cloud không thể xóa từ đây']);
+        $path = public_path('uploads/' . $filename);
+        if (File::exists($path)) {
+            File::delete($path);
+            return response()->json(['success' => true, 'message' => 'Đã xóa ảnh']);
+        }
+        return response()->json(['success' => true, 'message' => 'Ảnh không tồn tại hoặc trên cloud']);
     }
 }

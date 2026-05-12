@@ -172,12 +172,157 @@ function renderOrders() {
     `}).join('');
 }
 
+// ============================================
+// IMAGE UPLOAD HANDLING
+// ============================================
+
+let currentImageUrl = ''; // Lưu URL ảnh hiện tại (từ upload hoặc URL thủ công)
+
+function resetImageState() {
+    currentImageUrl = '';
+    document.getElementById('prod-img').value = '';
+    document.getElementById('prod-img-file').value = '';
+    document.getElementById('prod-img-url').value = '';
+    document.getElementById('prod-img-preview').style.display = 'none';
+    document.getElementById('upload-progress').style.display = 'none';
+    document.getElementById('upload-progress-bar').style.width = '0%';
+}
+
+function showImagePreview(url) {
+    const preview = document.getElementById('prod-img-preview');
+    const previewImg = document.getElementById('prod-img-preview-img');
+    previewImg.src = url;
+    previewImg.onload = () => { preview.style.display = 'block'; };
+    previewImg.onerror = () => { preview.style.display = 'none'; };
+}
+
+window.removeImage = function() {
+    resetImageState();
+}
+
+// Upload file lên server
+function uploadImageFile(file) {
+    if (!file || !file.type.startsWith('image/')) {
+        Swal.fire('Lỗi', 'Vui lòng chọn file ảnh hợp lệ', 'error');
+        return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+        Swal.fire('Lỗi', 'File ảnh quá lớn (tối đa 5MB)', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // Hiển thị progress
+    const progressDiv = document.getElementById('upload-progress');
+    const progressBar = document.getElementById('upload-progress-bar');
+    const statusText = document.getElementById('upload-status');
+    progressDiv.style.display = 'block';
+    progressBar.style.width = '20%';
+    statusText.textContent = 'Đang tải lên...';
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', '/admin/upload', true);
+    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+
+    xhr.upload.onprogress = function(e) {
+        if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 90);
+            progressBar.style.width = pct + '%';
+        }
+    };
+
+    xhr.onload = function() {
+        progressBar.style.width = '100%';
+        try {
+            const result = JSON.parse(xhr.responseText);
+            if (xhr.status === 200 && result.success) {
+                currentImageUrl = result.url;
+                document.getElementById('prod-img').value = result.url;
+                statusText.textContent = '✓ Tải lên thành công!';
+                statusText.style.color = '#48bb78';
+                showImagePreview(result.url);
+                setTimeout(() => { progressDiv.style.display = 'none'; }, 1500);
+            } else {
+                statusText.textContent = '✗ ' + (result.message || 'Upload thất bại');
+                statusText.style.color = '#e53e3e';
+            }
+        } catch (e) {
+            statusText.textContent = '✗ Lỗi kết nối server';
+            statusText.style.color = '#e53e3e';
+        }
+    };
+
+    xhr.onerror = function() {
+        statusText.textContent = '✗ Lỗi kết nối server';
+        statusText.style.color = '#e53e3e';
+    };
+
+    xhr.send(formData);
+}
+
+// --- Drop zone: click to select ---
+document.getElementById('upload-drop-zone').addEventListener('click', function() {
+    document.getElementById('prod-img-file').click();
+});
+
+// --- File input change ---
+document.getElementById('prod-img-file').addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        uploadImageFile(this.files[0]);
+    }
+});
+
+// --- Drag & Drop ---
+const dropZone = document.getElementById('upload-drop-zone');
+
+dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.style.borderColor = 'var(--admin-accent)';
+    this.style.background = 'rgba(255,255,255,0.08)';
+});
+
+dropZone.addEventListener('dragleave', function(e) {
+    e.preventDefault();
+    this.style.borderColor = 'rgba(255,255,255,0.2)';
+    this.style.background = 'rgba(255,255,255,0.03)';
+});
+
+dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.style.borderColor = 'rgba(255,255,255,0.2)';
+    this.style.background = 'rgba(255,255,255,0.03)';
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        uploadImageFile(e.dataTransfer.files[0]);
+    }
+});
+
+// --- URL input fallback ---
+document.getElementById('prod-img-url').addEventListener('input', function() {
+    const url = this.value.trim();
+    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        currentImageUrl = url;
+        document.getElementById('prod-img').value = url;
+        showImagePreview(url);
+    } else {
+        if (!document.getElementById('prod-img').value) {
+            document.getElementById('prod-img-preview').style.display = 'none';
+        }
+    }
+});
+
+// ============================================
+// PRODUCT MODAL
+// ============================================
+
 function openProductModal() {
     document.getElementById('product-form').reset();
     document.getElementById('prod-id').value = '';
     document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
-    document.getElementById('prod-img').required = true;
-    document.getElementById('prod-img-preview').style.display = 'none';
+    resetImageState();
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -190,21 +335,32 @@ document.getElementById('product-form').addEventListener('submit', function(e) {
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
-    const img = document.getElementById('prod-img').value;
     const desc = document.getElementById('prod-desc').value;
-    
-    if(id) {
-        // Edit
+
+    // Lấy URL ảnh từ hidden input hoặc currentImageUrl
+    let img = document.getElementById('prod-img').value || currentImageUrl;
+
+    // Nếu đang edit và không chọn ảnh mới → giữ ảnh cũ
+    if (id && !img) {
+        const existing = products.find(x => x.id == id);
+        if (existing) img = existing.img;
+    }
+
+    if (!id && !img) {
+        Swal.fire('Thiếu ảnh', 'Vui lòng chọn ảnh hoặc dán link ảnh cho sản phẩm', 'warning');
+        return;
+    }
+
+    if (id) {
         const p = products.find(x => x.id == id);
         p.name = name; p.price = price; p.img = img; p.desc = desc;
         Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
     } else {
-        // Add
-        const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
+        const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
         products.push({ id: newId, name, price, img, desc });
         Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
     }
-    
+
     localStorage.setItem('products', JSON.stringify(products));
     closeProductModal();
     renderProducts();
@@ -216,20 +372,15 @@ window.editProduct = function(id) {
     document.getElementById('prod-id').value = p.id;
     document.getElementById('prod-name').value = p.name;
     document.getElementById('prod-price').value = p.price;
-    // Không gán .value cho input type="file", thay vào đó xóa giá trị cũ và chỉ bắt buộc tải ảnh mới khi thêm mới
-    document.getElementById('prod-img').value = '';
-    document.getElementById('prod-img').required = false; 
     document.getElementById('prod-desc').value = p.desc;
     document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
-    
-    // Hiển thị ảnh preview nếu có
-    const previewDiv = document.getElementById('prod-img-preview');
-    const previewImg = document.getElementById('prod-img-preview-img');
+
+    // Reset image state rồi set lại ảnh cũ
+    resetImageState();
     if (p.img) {
-        previewImg.src = p.img;
-        previewDiv.style.display = 'block';
-    } else {
-        previewDiv.style.display = 'none';
+        currentImageUrl = p.img;
+        document.getElementById('prod-img').value = p.img;
+        showImagePreview(p.img);
     }
 
     document.getElementById('productModal').style.display = 'flex';
@@ -286,19 +437,4 @@ window.completeOrder = function(index) {
 // Init
 document.addEventListener('DOMContentLoaded', () => {
     renderDashboard();
-});
-
-// --- Image URL Preview ---
-document.getElementById('prod-img').addEventListener('input', function() {
-    const url = this.value.trim();
-    const preview = document.getElementById('prod-img-preview');
-    const previewImg = document.getElementById('prod-img-preview-img');
-
-    if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
-        previewImg.src = url;
-        previewImg.onload = () => { preview.style.display = 'block'; };
-        previewImg.onerror = () => { preview.style.display = 'none'; };
-    } else {
-        preview.style.display = 'none';
-    }
 });

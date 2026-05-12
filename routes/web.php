@@ -42,7 +42,8 @@ Route::get('/admin', function () {
     return view('admin');
 })->name('admin');
 
-use App\Http\Controllers\ProductController;
-Route::post('/admin/upload', [ProductController::class, 'uploadImage'])->name('admin.upload');
+use App\Http\Controllers\ImageController;
+Route::post('/admin/upload', [ImageController::class, 'upload'])->name('admin.upload');
+
 
 
