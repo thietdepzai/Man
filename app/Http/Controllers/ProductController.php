@@ -22,14 +22,7 @@ class ProductController extends Controller
             try {
                 $file = $request->file('image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $destinationPath = public_path('uploads/products');
-
-                // Kiểm tra và tạo thư mục nếu chưa tồn tại, cấp quyền 0777
-                if (!File::isDirectory($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                }
-
-                $file->move($destinationPath, $filename);
+                $file->move(public_path('uploads/products'), $filename);
                 
                 return response()->json([
                     'success' => true,
@@ -67,14 +60,7 @@ class ProductController extends Controller
             try {
                 $file = $request->file('image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $destinationPath = public_path('uploads/products');
-
-                // Tự động tạo thư mục nếu chưa có
-                if (!File::isDirectory($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                }
-
-                $file->move($destinationPath, $filename);
+                $file->move(public_path('uploads/products'), $filename);
                 
                 // Cập nhật đường dẫn file vào cơ sở dữ liệu
                 $imagePath = 'uploads/products/' . $filename;
@@ -117,13 +103,7 @@ class ProductController extends Controller
             try {
                 $file = $request->file('image');
                 $filename = time() . '_' . $file->getClientOriginalName();
-                $destinationPath = public_path('uploads/products');
-
-                if (!File::isDirectory($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                }
-
-                $file->move($destinationPath, $filename);
+                $file->move(public_path('uploads/products'), $filename);
                 
                 $imagePath = 'uploads/products/' . $filename;
                 
