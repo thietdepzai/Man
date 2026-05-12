@@ -176,6 +176,8 @@ function openProductModal() {
     document.getElementById('product-form').reset();
     document.getElementById('prod-id').value = '';
     document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm';
+    document.getElementById('prod-img').required = true;
+    document.getElementById('prod-img-preview').style.display = 'none';
     document.getElementById('productModal').style.display = 'flex';
 }
 
@@ -214,9 +216,22 @@ window.editProduct = function(id) {
     document.getElementById('prod-id').value = p.id;
     document.getElementById('prod-name').value = p.name;
     document.getElementById('prod-price').value = p.price;
-    document.getElementById('prod-img').value = p.img;
+    // Không gán .value cho input type="file", thay vào đó xóa giá trị cũ và chỉ bắt buộc tải ảnh mới khi thêm mới
+    document.getElementById('prod-img').value = '';
+    document.getElementById('prod-img').required = false; 
     document.getElementById('prod-desc').value = p.desc;
     document.getElementById('modal-title').innerText = 'Sửa Sản Phẩm';
+    
+    // Hiển thị ảnh preview nếu có
+    const previewDiv = document.getElementById('prod-img-preview');
+    const previewImg = document.getElementById('prod-img-preview-img');
+    if (p.img) {
+        previewImg.src = p.img;
+        previewDiv.style.display = 'block';
+    } else {
+        previewDiv.style.display = 'none';
+    }
+
     document.getElementById('productModal').style.display = 'flex';
 }
 
