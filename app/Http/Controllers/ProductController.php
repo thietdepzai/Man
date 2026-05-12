@@ -25,9 +25,30 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    /**
+     * Upload product image.
+     */
+    public function uploadImage(Request $request)
     {
-        //
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('public/uploads/products', $imageName);
+            
+            return response()->json([
+                'success' => true,
+                'url' => asset('storage/uploads/products/' . $imageName)
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Lỗi tải ảnh'
+        ], 400);
     }
 
     /**

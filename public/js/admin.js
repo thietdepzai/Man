@@ -181,27 +181,79 @@ function openProductModal() {
     document.getElementById('productModal').style.display = 'flex';
 }
 
+document.getElementById('prod-img').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const previewDiv = document.getElementById('prod-img-preview');
+    const previewImg = document.getElementById('prod-img-preview-img');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewDiv.style.display = 'block';
+        }
+        reader.readAsDataURL(file);
+    } else {
+        previewDiv.style.display = 'none';
+        previewImg.src = '';
+    }
+});
+
 function closeProductModal() {
     document.getElementById('productModal').style.display = 'none';
 }
 
-document.getElementById('product-form').addEventListener('submit', function(e) {
+document.getElementById('product-form').addEventListener('submit', async function(e) {
     e.preventDefault();
     const id = document.getElementById('prod-id').value;
     const name = document.getElementById('prod-name').value;
     const price = parseInt(document.getElementById('prod-price').value);
-    const img = document.getElementById('prod-img').value;
     const desc = document.getElementById('prod-desc').value;
+    
+    let imgPath = '';
+    const imgFile = document.getElementById('prod-img').files[0];
+    
+    // Nếu có file ảnh mới thì upload
+    if (imgFile) {
+        const formData = new FormData();
+        formData.append('image', imgFile);
+        
+        try {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const response = await fetch('/admin/upload', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: formData
+            });
+            const data = await response.json();
+            if (data.success) {
+                imgPath = data.url;
+            } else {
+                Swal.fire('Lỗi', data.message || 'Lỗi tải ảnh lên', 'error');
+                return;
+            }
+        } catch (error) {
+            Swal.fire('Lỗi', 'Không thể kết nối đến server', 'error');
+            return;
+        }
+    }
     
     if(id) {
         // Edit
         const p = products.find(x => x.id == id);
-        p.name = name; p.price = price; p.img = img; p.desc = desc;
+        p.name = name; p.price = price; p.desc = desc;
+        if (imgPath) p.img = imgPath; // Nếu có ảnh mới thì cập nhật, không thì giữ nguyên
         Swal.fire('Thành công', 'Cập nhật sản phẩm thành công', 'success');
     } else {
         // Add
+        if (!imgPath) {
+            Swal.fire('Lỗi', 'Vui lòng chọn ảnh', 'error');
+            return;
+        }
         const newId = products.length > 0 ? Math.max(...products.map(p=>p.id)) + 1 : 1;
-        products.push({ id: newId, name, price, img, desc });
+        products.push({ id: newId, name, price, img: imgPath, desc });
         Swal.fire('Thành công', 'Thêm sản phẩm thành công', 'success');
     }
     
