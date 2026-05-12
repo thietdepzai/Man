@@ -20,19 +20,34 @@ class ProductController extends Controller
     {
         if ($request->hasFile('image')) {
             try {
-                $file = $request->file('image');
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $file->move(public_path('uploads/products'), $filename);
-                
-                return response()->json([
-                    'success' => true,
-                    'url' => asset('uploads/products/' . $filename)
+                $image = $request->file('image');
+                $base64Image = base64_encode(file_get_contents($image->getRealPath()));
+
+                $response = \Illuminate\Support\Facades\Http::withHeaders([
+                    'Authorization' => 'Client-ID 2955f110c73299b',
+                ])->asForm()->post('https://api.imgur.com/3/image', [
+                    'image' => $base64Image,
                 ]);
+
+                $result = $response->json();
+
+                if ($response->successful() && isset($result['data']['link'])) {
+                    return response()->json([
+                        'success' => true,
+                        'url' => $result['data']['link']
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Lỗi từ Imgur: ' . ($result['data']['error'] ?? 'Không xác định')
+                ], 500);
+
             } catch (\Exception $e) {
-                Log::error('Lỗi upload ảnh: ' . $e->getMessage());
+                Log::error('Lỗi upload ảnh Imgur: ' . $e->getMessage());
                 return response()->json([
                     'success' => false, 
-                    'message' => 'Lỗi lưu file: ' . $e->getMessage()
+                    'message' => 'Lỗi kết nối Imgur: ' . $e->getMessage()
                 ], 500);
             }
         }

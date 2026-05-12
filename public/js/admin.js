@@ -207,19 +207,19 @@ document.getElementById('product-form').addEventListener('submit', async functio
         formData.append('image', fileInput.files[0]);
 
         try {
-            const res = await fetch('https://api.imgur.com/3/image', {
+            const res = await fetch('/admin/upload', {
                 method: 'POST',
                 headers: {
-                    'Authorization': 'Client-ID 2955f110c73299b'
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: formData
             });
             const data = await res.json();
             
             if (data.success) {
-                imgUrl = data.data.link; // Lấy URL ảnh từ Imgur
+                imgUrl = data.url; // Lấy URL ảnh đã được lưu qua Laravel
             } else {
-                return Swal.fire('Lỗi', 'Lỗi tải ảnh: ' + (data.data.error || ''), 'error');
+                return Swal.fire('Lỗi', 'Lỗi tải ảnh: ' + (data.message || ''), 'error');
             }
         } catch (err) {
             console.error(err);
