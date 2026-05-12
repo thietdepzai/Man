@@ -375,7 +375,7 @@ document.getElementById('prod-img').addEventListener('input', function() {
 });
 
 // --- Gallery Functions ---
-async function openGalleryModal() {
+window.openGalleryModal = async function() {
     document.getElementById('galleryModal').style.display = 'flex';
     const grid = document.getElementById('gallery-grid');
     const loading = document.getElementById('gallery-loading');
@@ -419,11 +419,11 @@ async function openGalleryModal() {
     }
 }
 
-function closeGalleryModal() {
+window.closeGalleryModal = function() {
     document.getElementById('galleryModal').style.display = 'none';
 }
 
-function selectGalleryImage(url) {
+window.selectGalleryImage = function(url) {
     document.getElementById('prod-img-url').value = url;
     document.getElementById('prod-img').value = ''; // Xoá file đang chọn nếu có
     
