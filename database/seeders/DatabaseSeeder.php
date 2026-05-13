@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +16,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // Xóa danh mục cũ nếu cần thiết hoặc seed mới
+        DB::table('categories')->insertOrIgnore([
+            ['id' => 1, 'name' => 'Muối Hồng Himalaya'],
+            ['id' => 2, 'name' => 'Muối Tổng Hợp']
+        ]);
 
         User::factory()->create([
             'name' => 'Test User',
