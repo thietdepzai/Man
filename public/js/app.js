@@ -2,17 +2,17 @@
 // --- Data ---
 const defaultProducts = [
     { id: 1, name: "Muối Hồng Himalaya Hạt Lớn", price: 150000, img: "https://images.unsplash.com/photo-1518110924446-24e5d8dce288?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối hồng Himalaya tinh khiết khai thác từ mỏ đá muối cổ đại, giữ nguyên khoáng chất tự nhiên.", category: "Muối Hồng Himalaya" },
-    { id: 2, name: "Muối Biển Chấm Hoa Quả", price: 85000, img: "https://images.unsplash.com/photo-1623838421838-89c56fa98c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối biển sấy khô kết hợp ớt sừng và tôm khô, vị cay nồng đậm đà.", category: "Muối Gia Vị" },
-    { id: 3, name: "Muối Tiêu Đen Nguyên Hạt", price: 120000, img: "https://images.unsplash.com/photo-1596647248356-0798e945c115?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Sự kết hợp hoàn hảo giữa muối biển và tiêu đen Phú Quốc.", category: "Muối Gia Vị" },
-    { id: 4, name: "Muối Tỏi Thảo Mộc", price: 95000, img: "https://images.unsplash.com/photo-1605335122165-4fcd0339d1b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối ướp thịt tuyệt hảo với tỏi sấy và các loại thảo mộc Ý.", category: "Muối Gia Vị" },
-    { id: 5, name: "Muối Truffle Đen", price: 450000, img: "https://images.unsplash.com/photo-1621252178044-f254ee4bc710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Đỉnh cao ẩm thực với nấm Truffle đen từ Ý xay nhuyễn cùng muối biển.", category: "Muối Biển Tinh Khiết" },
-    { id: 6, name: "Muối Chanh Vàng", price: 110000, img: "https://images.unsplash.com/photo-1587313632739-c894c2598d9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Vị chua thanh mát từ vỏ chanh vàng sấy lạnh.", category: "Muối Gia Vị" },
-    { id: 7, name: "Muối Khói Gỗ Sồi", price: 180000, img: "https://images.unsplash.com/photo-1616428751433-f57ec0968df7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Hun khói thủ công bằng gỗ sồi trong 48h, tạo hương vị BBQ đặc trưng.", category: "Muối Biển Tinh Khiết" },
-    { id: 8, name: "Muối Diêm Mạch", price: 160000, img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Giàu protein và khoáng chất, kết hợp hoàn hảo cho chế độ ăn eat clean.", category: "Muối Biển Tinh Khiết" }
+    { id: 2, name: "Muối Biển Chấm Hoa Quả", price: 85000, img: "https://images.unsplash.com/photo-1623838421838-89c56fa98c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối biển sấy khô kết hợp ớt sừng và tôm khô, vị cay nồng đậm đà.", category: "Muối Tổng Hợp" },
+    { id: 3, name: "Muối Tiêu Đen Nguyên Hạt", price: 120000, img: "https://images.unsplash.com/photo-1596647248356-0798e945c115?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Sự kết hợp hoàn hảo giữa muối biển và tiêu đen Phú Quốc.", category: "Muối Tổng Hợp" },
+    { id: 4, name: "Muối Tỏi Thảo Mộc", price: 95000, img: "https://images.unsplash.com/photo-1605335122165-4fcd0339d1b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Muối ướp thịt tuyệt hảo với tỏi sấy và các loại thảo mộc Ý.", category: "Muối Tổng Hợp" },
+    { id: 5, name: "Muối Truffle Đen", price: 450000, img: "https://images.unsplash.com/photo-1621252178044-f254ee4bc710?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Đỉnh cao ẩm thực với nấm Truffle đen từ Ý xay nhuyễn cùng muối biển.", category: "Muối Tổng Hợp" },
+    { id: 6, name: "Muối Chanh Vàng", price: 110000, img: "https://images.unsplash.com/photo-1587313632739-c894c2598d9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Vị chua thanh mát từ vỏ chanh vàng sấy lạnh.", category: "Muối Tổng Hợp" },
+    { id: 7, name: "Muối Khói Gỗ Sồi", price: 180000, img: "https://images.unsplash.com/photo-1616428751433-f57ec0968df7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Hun khói thủ công bằng gỗ sồi trong 48h, tạo hương vị BBQ đặc trưng.", category: "Muối Tổng Hợp" },
+    { id: 8, name: "Muối Diêm Mạch", price: 160000, img: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80", desc: "Giàu protein và khoáng chất, kết hợp hoàn hảo cho chế độ ăn eat clean.", category: "Muối Tổng Hợp" }
 ];
 
 let products = JSON.parse(localStorage.getItem('products'));
-if (!products || products.length === 0 || !products[0].category) {
+if (!products || products.length === 0 || !products[0].category || products.some(p => p.category === 'Muối Gia Vị' || p.category === 'Muối Biển Tinh Khiết' || p.category === 'undefined' || !p.category)) {
     products = defaultProducts;
     localStorage.setItem('products', JSON.stringify(products));
 }
